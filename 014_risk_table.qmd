@@ -1,0 +1,166 @@
+---
+title: "Risk table"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: false
+  message: false
+  warning: false
+---
+### Constructing a table with numbers at risk
+Now we make our risk table. This part does not depend on the previous plots, `base`, `inner`, `outer` or `pip`.
+
+First, we restrict to observations from our data where there is a number at risk, and for clarity we include only relevant variables.
+
+```{r}
+# the relevant data
+atrisk_survival <- survival |>
+  filter(is.na(natrisk) == F) |>
+  select(x, time, natrisk)
+```
+
+#### Plotting numbers in a coordinate system
+The very basic part of the plot consists of numbers written in a coordinate system. You need to start a new `ggplot` using the data `atrisk_survival`. The necessary aesthetics are `x`, `y`, and `label`. The `geom_` you need for the risk table is called `geom_text()`. Make the plot.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+The exposure variable goes into the `y`-aesthetic.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text()
+```
+:::
+
+#### Stripping the plot of noise
+We want to remove almost everything except for the numbers in the risk table. The built-in theme `theme_void()` removes everything except the data used in the plot. Add `theme_void()` with `base_size` specified as you have done for other themes.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text() +
+  theme_void(base_size = bsize)
+```
+:::
+::: {.callout-note appearance="default"}
+## `base_size` and text size
+At this point `base_size` actually does not affect anything. The size of the text can be modified by the parameter `size` inside `geom_text()`. `base_size` is not used until we reinsert the labels on the y-axis.
+:::
+#### Recreating the y-axis labels
+We want to get the labels on the y-axes (the levels of the exposure) back into the plot. To do so we add a custom theme, where we set `axis.text.y` to `element_text(hjust = 1, color = mypal)`. (Try different values for `hjust` to see what it does.) You will probably get a warning, but it should be safe to ignore in this situation.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+As previously noted, the order of the built-in theme (`theme_void()`) and your custom theme is important.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text() +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal))
+```
+:::
+
+::: {.callout-note appearance="default"}
+## Text colors
+If you want the text in the risk table to take the same colors as the curves, you can add a `color` aesthetic to your plot. If you do so, make sure to remove the legend as you did in `geom_stepribbon()`.
+:::
+
+#### Adding a title
+Now we add a title to the risk table (so readers will know it shows numbers at risk). This can be done using the function `ggtitle()`. Simply specify the title you want the risk table to have in `ggtitle()`.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+The title should be included as a string (use quotation marks).
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text() +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal)) +
+  ggtitle("At risk")
+```
+:::
+
+#### Editing the appearance of the title
+The title might need some adjustment both with regards to position and size. Within your custom `theme` you can modify the title using the parameter `plot.title` which can be edited using `element_text()` (which you also use for `axis.text.y`). Try setting `size` to `bsize` inside `element_text()` and tinker a bit with `hjust` until you are happy with its placement. When you are happy with the look of the risk table, make it into an object called `risktable`.
+
+::: {.callout-note appearance="default"}
+## Appearance
+At this stage it can be hard to tell what will look good when combining the risk table and the curves. Consider revising the parameters of the risk table once you have the complete plot.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+You can use negative values for `hjust` if you prefer.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+risktable <- ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text() +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal),
+        plot.title = element_text(hjust = -.1, size = bsize)) +
+  ggtitle("At risk")
+```
+:::
+
+#### The finished risk table
+Your risk table should now look something like this (with allowance for differences based on personal preferences):
+
+::: {.callout-note collapse="true" appearance="default" icon=false}
+## Show plot
+```{r, echo = FALSE, eval = TRUE}
+
+library(ggplot2)
+library(patchwork)
+library(data.table)
+library(dplyr)
+library(pammtools)
+library(scales)
+
+survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  mutate(x = factor(
+    x,
+    levels = c(2,1),
+    labels = c("Control", "Intervention")
+  )) |>
+  filter(analysis == "Survival")
+
+bsize <- 15
+
+mypal <- c("#aaaaaa", "#af0000")
+
+atrisk_survival <- survival |>
+  filter(is.na(natrisk) == F) |>
+  select(x, time, natrisk)
+
+ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text() +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal),
+        plot.title = element_text(hjust = -.1, size = bsize)) +
+  ggtitle("At risk")
+```
+:::

@@ -1,0 +1,60 @@
+---
+title: "Global options vs global values"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: true
+  message: false
+  warning: false
+---
+
+### Regarding layout of plots
+If you are going to make many plots that are too distinct to wrap inside a function, and you therefore need to specify themes and colors in each plot to achieve a coherent style, you may consider specifying your default theme and colors as global options, rather than creating values which you then refer to (possibly many times over) in the individual plot.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+# Setting the default palette for fills and colors to the one proposed by Okabe and Ito for discrete scales
+# (continuous scales can also be specified)
+options(
+  ggplot2.discrete.fill =  c(
+    "#E69F00",
+    "#56B4E9",
+    "#009E73",
+    "#F0E442",
+    "#0072B2",
+    "#D55E00",
+    "#CC79A7",
+    "#999999"
+  ),
+  ggplot2.discrete.colour =  c(
+    "#E69F00",
+    "#56B4E9",
+    "#009E73",
+    "#F0E442",
+    "#0072B2",
+    "#D55E00",
+    "#CC79A7",
+    "#999999"
+  )
+)
+
+# Setting the classic theme as default with a given base size.
+# The legend title will be removed by default and the legend
+# will be inserted inside the plot in the top left corner
+theme_set(
+  theme_classic(base_size = 15) +
+    theme(legend.title = element_blank(),
+          legend.position = "inside",
+          legend.position.inside = c(.1,.8))
+)
+
+mpg |>
+  filter(!(class %in% c("subcompact", "suv"))) |>
+  ggplot(aes(class, fill = class, color = class)) +
+  geom_bar(alpha = .7, linewidth = 2)
+```
+

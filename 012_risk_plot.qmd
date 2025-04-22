@@ -1,0 +1,352 @@
+---
+title: "The base Kaplan-Meier plot"
+format:
+  html:
+    self-contained: false
+    code-copy: true
+
+execute:
+  eval: false
+  message: false
+  warning: false
+---
+
+### Making a base version of the survival curves
+
+
+The first thing we want to do is to make a base version of the survival curves. We will make this an object called `base`. This base version will then be used in different formats for both the inner and the outer part of the plots.
+
+#### Making a stepped curve.
+To make risk and survival curves we use the function `geom_step()` from `ggplot2`.
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate)) +
+  geom_step()
+```
+
+At this point you should should get something rather confused looking - two survival curves mashed up.
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+survival <- data.table::fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  dplyr::mutate(x = factor(
+    x,
+    levels = c(2,1),
+    labels = c("Control", "Intervention")
+  )) |>
+  dplyr::filter(analysis == "Survival")
+ggplot2::ggplot(survival, ggplot2::aes(x = time, y = estimate)) +
+  ggplot2::geom_step()
+```
+:::
+
+#### Separate curves for separate groups
+The first thing we want to do is to separate the two survival curves. Do this by specifying a `color` aesthetic.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+The variable you need to use is the one indicating the exposure group.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_step()
+```
+:::
+
+#### Thicker lines
+A second thing we want to do is to make the lines thicker. Do this by setting the parameter `linewidth` in `geom_step()` to 2. (You can use some other value of your choice, something between 1.5 and 2 often works well depending on the use of the figure.)
+
+::: {.callout-tip collapse="true" appearance="simple"}
+# Hint
+
+`linewidth` should not be set as an aesthetic but as an ordinary parameter.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+# Solution
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_step(linewidth = 2)
+```
+:::
+
+::: {.callout-note appearance="simple"}
+# The case of many similar plots
+
+If you are going to make many different plots, and for some reason you are not making a function to help out, it will be a good idea to have a global value you can use for `linewidth` (as you have `bsize` for `base_size`).
+:::
+
+#### Confidence interval bands
+We now want to add confidence interval bands. To do this we use `geom_stepribbon()` from the `pammtools` package. Note that `geom_stepribbon()` requires 2 aesthetics we have not provided yet, `ymin` and `ymax`. Add `geom_stepribbon()` to the plot while specifying the additional aesthetics.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+# Hint 1
+
+`ymin` and `ymax` can be added to the global aesthetics or locally within `geom_stepribbon(aes())`.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+# Hint 2
+
+The variables you need to use for `ymin` and `ymax` are the ones determining the lower and upper confidence limits.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+# Solution
+
+First method: Inserting aesthetics locally within `geom_stepribbon()`. This is useful if these variables should be used here and other variables should be used for `ymin` and `ymax` elsewhere.
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_step(linewidth = 2) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl))
+```
+
+Second method: Specifying aesthetics globally. This is useful if they should be used across several `geom_`s
+
+```{r}
+ggplot(survival,
+       aes(x = time,
+           y = estimate, ymin = lcl, ymax = ucl,
+           color = x)
+       ) +
+  geom_step(linewidth = 2) +
+  geom_stepribbon()
+```
+
+In our example it makes no difference, as no other `geom_`s in this plot require `ymin` and `ymax` aesthetics.
+:::
+
+#### Layered graphics
+If you added `geom_stepribbon()` as the last line in your plot you will notice it covers (hides) the risk curves. We want the ribbons to be behind the curves, and we can achieve this by reversing the order of `geom_step()` and `geom_stepribbon()`. Do that.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+Simply switch the order of `geom_step()` and `geom_stepribbon()`.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl)) +
+  geom_step(linewidth = 2)
+
+```
+:::
+
+#### Remove part of the legend
+Notice that the legend now has a dark background - `geom_stepribbon()` is also included in the legend. We don't want that (well, you might but for the sake of the exercise you don't).
+
+We can prevent `geom_stepribbon()` from transmitting to the legend by setting the parameter `show.legend` to `FALSE` within `geom_stepribbon()`.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint (if you specified `ymin` and `ymax` as local aesthetics)
+
+Parameters should be separated by commas, i.e., there must be a comma between `aes()` and `show.legend`.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint (regardless)
+
+`show.legend` should be specified as an ordinary parameter not an aesthetic.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl),
+                  show.legend = FALSE) +
+  geom_step(linewidth = 2)
+```
+:::
+
+#### Coloring areas using `fill`
+We also want the fill of the ribbons to be colored, we can achieve this by specifying the aesthetic `fill` - do that. (As for `ymin` and `ymax`, `fill` can be specified locally or globally, it should not make a difference in this exercise as `fill` is not used elsewhere.)
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+The variable used to determine the fill is the same as the one used for the `color`-aesthetic.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x),
+                  show.legend = FALSE) +
+  geom_step(linewidth = 2)
+```
+:::
+
+#### Transparency of areas using `alpha`
+Whoops, now we can't see the actual curves. Better add some transparency to the ribbons. Do that by specifying the parameter `alpha` within `geom_stepribbon()`, e.g., set it to .2 (20% opacity / 80% transparency), or some other value of your preference.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+`alpha` should be specified as an ordinary parameter not an aesthetic. Remember to separate parameters by commas.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2)
+```
+:::
+
+#### Editing oulines of areas
+Again, here comes a matter of taste. You might not want to have colored borders on you ribbons. You can remove them or, if you prefer, you might like to make them white. To remove the borders, specify the `color`-aesthetic locally (within `aes()` within `geom_stepribbon()`) to be `NULL`. To make the borders white, set the parameter (not the aesthetic) `color` to `"white"` within `geom_stepribbon()`.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution 1 - remove the borders
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2)
+```
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution 2 - white borders
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x),
+                  show.legend = FALSE,
+                  alpha = .2,
+                  color = "white") +
+  geom_step(linewidth = 2)
+```
+:::
+
+#### Specifying colors
+The default colors from `ggplot2` are poor^\[citation\ needed\]^. We therefore want to use the values we specified initially as `mypal`. To do this we add 2 functions controlling the layout of the figure. Specifically, we will use `scale_color_manual()` and `scale_fill_manual()`, which both have a parameter called `values`. Set `values` to `mypal`.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+Add `scale_color_manual()` and `scale_fill_manual()` in separate lines/at the end of the plot. Within each of these set `values` to `mypal`.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal)
+```
+:::
+
+#### Adding % to tick labels 
+As a final step in making the base plot, i.e., the plot we will use to insert one plot into the other, we want to convert the y-axis to a percent-scale. We can do this using the function `percent_format()` from the `scales` package within the function `scale_y_continuous()` from `ggplot2`. Specifically we need to specify that the parameter `labels` in `scale_y_continuous()` should be `percent_format(accuracy = 1)`. Try playing with accuracy to see what it does (or check the documentation).
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+First you need to add `scale_y_continuous()` as a separate line in the plot. Within `scale_y_continuous()` you need to specify the parameter `labels` as described above.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+```
+:::
+
+#### Creating the object `base`
+The last thing there is to do is to make the plot into an object which you should name `base` (for internal consistency of this exercise - this name is not important in itself).
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+Simply write `base <-` in front of you plot and run it. An object called `base` should pop up in you Environment tab.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+```
+:::
+
+#### So far so good..?
+At this point you should have a plot looking somewhat like this (choice of color, widths of lines, outline and transparency of CI-bands, ... may result in differences).
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo = FALSE, eval = TRUE}
+library(ggplot2)
+library(patchwork)
+library(data.table)
+library(dplyr)
+library(pammtools)
+library(scales)
+
+survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  mutate(x = factor(
+    x,
+    levels = c(2,1),
+    labels = c("Control", "Intervention")
+  )) |>
+  filter(analysis == "Survival")
+
+mypal <- c("#aaaaaa", "#af0000")
+
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+```
+:::

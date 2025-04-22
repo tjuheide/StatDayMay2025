@@ -1,0 +1,225 @@
+---
+title: "A function for making risk curves"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: false
+  message: false
+  warning: false
+---
+### Avoid repetitions - use functions
+In `SAS` we have macros, `R` lets us use function. Here we aim to develop a function which will let us make a risk plot for a specified value of `analysis` in our `risk` data set.
+
+The first step is to develop one of the plots, then we wrap a function around the code (as you might also do when developing macros), finally we call the function for each value of `analysis`.
+
+#### Subsetting to one analysis
+Use `filter()` to make a data set called `temp` including only results from `risk` where `analysis` takes the value `"Cholera"`. Do this by first defining a global value `thisanalysis` as `"Cholera"`, then use `thisanalysis` rather than `"Cholera"` when filtering.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+Specify `thisanalysis`
+```{r}
+thisanalysis <- "Cholera"
+```
+
+Then apply `filter()` where you restrict to `analysis` equalling `thisanalysis`
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+thisanalysis <- "Cholera"
+temp <- risk |>
+  filter(analysis == thisanalysis)
+```
+:::
+
+#### Plotting the risk curves
+Now make a plot of risk against time with one curve for each exposure group. Follow the same procedure as you did when you made `base`. You can specify a template theme as well, e.g. `theme_classic()`. 
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+You need to use the data set `temp`.
+
+Use `geom_stepribbon()`, `geom_step()`, `scale_*_manual()`, `scale_y_continuous()` and `theme_*()` with parameter spefications as you did previously.
+:::
+
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(temp, aes(x = time, y = estimate, color = x, fill = x, ymin = lcl, ymax = ucl)) +
+  geom_stepribbon(show.legend = FALSE,
+                  alpha = .2,
+                  aes(color = NULL)) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  theme_classic(base_size = bsize)
+```
+:::
+
+#### Controlling the legend
+We want the legend within the plot in this exercise (rather than removed as in the previous). To move the legend into the plot, add a custom theme and set `legend.position` to `"inside"`. Furthermore, specify `legend.position.inside` within the theme. Let `legend.position.inside` be a numeric 2-dimensional vector with values between 0 and 1.
+Finally, remove the legend title by setting `legend.title` to `element_blank()` (you also need to do this inside your custom theme).
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+You need to specify the legend position the same way as you did when you made the plots `inner` and `outer` from `base`. Then add the extra parameter `legend.position.inside` and give it a 2-dimensional value using the function `c()`.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(temp, aes(x = time, y = estimate, color = x, fill = x, ymin = lcl, ymax = ucl)) +
+  geom_stepribbon(show.legend = FALSE,
+                  alpha = .2,
+                  aes(color = NULL)) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "inside",
+        legend.position.inside = c(.8, .2),
+        legend.title = element_blank())
+```
+:::
+
+#### Axis titles
+Specify that the title on the x-axis should be `"Time"`. For the y-axis we want to use the value of `thisanalysis` so it reads "Risk of [analysis]". We will use `labs()` to set the titles. For the x-axis it is simple. For the y-axis we can use the function `paste()` which allows us to paste different strings together. In `labs()` set `y` to `paste("Risk of", thisanalysis)`.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+ggplot(temp, aes(x = time, y = estimate, color = x, fill = x, ymin = lcl, ymax = ucl)) +
+  geom_stepribbon(show.legend = FALSE,
+                  alpha = .2,
+                  aes(color = NULL)) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "inside",
+        legend.position.inside = c(.8, .2),
+        legend.title = element_blank()) +
+  labs(x = "Time", y = paste("Risk of", thisanalysis))
+```
+:::
+
+#### Wrapping up the function
+The contents of the function are essentially ready now. Wrap it up in a function which you can call `risk_fun`. The function should take the parameter `thisanalysis`.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint (create a function)
+
+To create and name a function you can use the following code
+
+```{r}
+risk_fun <- function(thisanalysis) {
+  
+}
+
+```
+Put the code that the function needs to execute inside the curly brackets.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint (what to put into the function)
+
+The function should first filter the data set then make the plot. Make sure you do not overwrite `thisanalysis` inside the function.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+To create and name a function you can use the following code
+
+```{r}
+risk_fun <- function(thisanalysis) {
+  temp <- risk |>
+    filter(analysis == thisanalysis)
+  
+  ggplot(temp, aes(x = time,
+                   y = estimate,
+                   color = x,
+                   fill = x,
+                   ymin = lcl,
+                   ymax = ucl)) +
+    geom_stepribbon(show.legend = FALSE,
+                    alpha = .2,
+                    aes(color = NULL)) +
+    geom_step(linewidth = 2) +
+    scale_color_manual(values = mypal) +
+    scale_fill_manual(values = mypal) +
+    scale_y_continuous(labels = percent_format(accuracy = 1)) +
+    theme_classic(base_size = bsize) +
+    theme(
+      legend.position = "inside",
+      legend.position.inside = c(.8, .2),
+      legend.title = element_blank()
+    ) +
+    labs(x = "Time", y = paste("Risk of", thisanalysis))
+}
+
+```
+:::
+
+#### Applying the function - unifying scale on y-axes
+Apply the function on the two different analyses (`"Cholera"` and `"Plague"`). Notice that the y-axes have different scales. Use `coord_cartesian()` inside the function to make the y-axis go to 15% (0.15).
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+In `coord_cartesian()` you need to specify `ylim` which should be given a 2-dimensional vector as input.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## solution
+
+To create and name a function you can use the following code
+
+```{r}
+risk_fun <- function(thisanalysis) {
+  temp <- risk |>
+    filter(analysis == thisanalysis)
+  
+  ggplot(temp, aes(x = time,
+                   y = estimate,
+                   color = x,
+                   fill = x,
+                   ymin = lcl,
+                   ymax = ucl)) +
+    geom_stepribbon(show.legend = FALSE,
+                    alpha = .2,
+                    aes(color = NULL)) +
+    geom_step(linewidth = 2) +
+    scale_color_manual(values = mypal) +
+    scale_fill_manual(values = mypal) +
+    scale_y_continuous(labels = percent_format(accuracy = 1)) +
+    theme_classic(base_size = bsize) +
+    theme(
+      legend.position = "inside",
+      legend.position.inside = c(.8, .2),
+      legend.title = element_blank()
+    ) +
+    labs(x = "Time", y = paste("Risk of", thisanalysis)) +
+    coord_cartesian(ylim = c(0,.15))
+}
+
+```
+:::
+
+The function should now be ready for use.

@@ -1,0 +1,100 @@
+---
+title: "Plots in panels"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: true
+  message: false
+  warning: false
+---
+
+```{r echo = FALSE, fig.width = 13, fig.fullwidth = TRUE}
+library(ggplot2)
+library(patchwork)
+library(data.table)
+library(dplyr)
+library(pammtools)
+library(scales)
+
+# subsetting to the risk analysis
+risk <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  mutate(x = factor(
+    x,
+    levels = c(2,1),
+    labels = c("Control  ", "Intervention  ")
+  )) |>
+  filter(analysis != "Survival")
+
+# data for risk table
+atrisk_risk <- risk |>
+  filter(is.na(natrisk) == F) |>
+  select(x, time, natrisk, analysis)
+
+bsize <- 15
+
+mypal <- c("#aaaaaa", "#af0000")
+
+risk_fun <- function(thisanalysis) {
+  temp <- risk |>
+    filter(analysis == thisanalysis)
+  
+  ggplot(temp, aes(x = time,
+                   y = estimate,
+                   color = x,
+                   fill = x,
+                   ymin = lcl,
+                   ymax = ucl)) +
+    geom_stepribbon(show.legend = FALSE,
+                    alpha = .2,
+                    aes(color = NULL)) +
+    geom_step(linewidth = 2) +
+    scale_color_manual(values = mypal) +
+    scale_fill_manual(values = mypal) +
+    scale_y_continuous(labels = percent_format(accuracy = 1)) +
+    theme_classic(base_size = bsize) +
+    theme(
+      legend.position = "inside",
+      legend.position.inside = c(.8, .2),
+      legend.title = element_blank()
+    ) +
+    labs(x = "Time", y = paste("Risk of", thisanalysis)) +
+    coord_cartesian(ylim = c(0,.15))
+}
+
+atrisk_fun <- function(thisanalysis){
+  temp <- atrisk_risk |>
+    filter(analysis == thisanalysis)
+  ggplot(temp, aes(x = time, y = x, label = natrisk)) +
+    geom_text() +
+    theme_void(base_size = bsize) +
+    theme(axis.text.y = element_text(hjust = 1),
+          plot.title = element_text(hjust = -.1, size = bsize)) +
+    ggtitle("At risk")
+}
+
+
+Plague_curves <- risk_fun("Plague")
+Plague_table <- atrisk_fun("Plague")
+Plague <- Plague_curves / Plague_table +
+  plot_layout(heights = c(9,1))
+
+Plague[[1]] <- Plague[[1]] +
+  theme(axis.title.y = element_text(vjust = -10))
+Plague <- wrap_elements(Plague)
+
+Cholera_curves <- risk_fun("Cholera")
+Cholera_table <- atrisk_fun("Cholera")
+Cholera <- Cholera_curves / Cholera_table +
+  plot_layout(heights = c(9,1))
+
+Cholera[[1]] <- Cholera[[1]] +
+  theme(axis.title.y = element_text(vjust = -10))
+Cholera <- wrap_elements(Cholera)
+
+(Plague | Cholera) +
+  plot_annotation(tag_level = "A") &
+  theme(plot.tag.position = c(.1, 1))
+```

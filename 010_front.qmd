@@ -1,0 +1,80 @@
+---
+title: "Plot in plot"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: true
+  message: false
+  warning: false
+---
+
+```{r, echo =  FALSE}
+
+library(ggplot2)
+library(patchwork)
+library(data.table)
+library(dplyr)
+library(pammtools)
+library(scales)
+
+bsize <- 15
+
+mypal <- c("#aaaaaa", "#af0000")
+
+survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  mutate(x = factor(
+    x,
+    levels = c(2,1),
+    labels = c("Control", "Intervention")
+  )) |>
+  filter(analysis == "Survival")
+
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+inner <- base +
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none",
+        axis.title = element_blank())
+
+outer <- base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", color = "", y = "Survival") +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "none")
+
+pip <- outer + inset_element(inner,
+                             left = .1,
+                             right = .97,
+                             top = .9,
+                             bottom = .05)
+
+atrisk_survival <- survival |>
+  filter(is.na(natrisk) == F) |>
+  select(x, time, natrisk)
+
+risktable <- ggplot(atrisk_survival, aes(x = time, y = x)) +
+  geom_text(aes(label = natrisk), show.legend = FALSE) +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal),
+        plot.title = element_text(hjust = -.1, size = bsize)) +
+  ggtitle("At risk")
+
+pipatrisk <- pip / risktable + plot_layout(heights = c(9,1))
+
+# move label on y-axis closer to the figure
+pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
+  theme(axis.title.y = element_text(vjust = -7))
+
+pipatrisk
+```

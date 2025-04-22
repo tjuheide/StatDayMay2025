@@ -1,0 +1,45 @@
+---
+title: "A 'Risk table' function"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: false
+  message: false
+  warning: false
+---
+
+### Avoid repetitions - use functions (again)
+
+As for the risk curves we will make a function that can produce risk tables for a each level of `analysis`.
+
+Again, it is probably a good idea to make a risk table within one level of `analysis` and then wrap it up inside a function.
+
+As for the risk curve function, you might want to
+
+-   start by subsetting the data (`atrisk_risk`) to a level of `analysis`,
+
+-   develop a risk table as you did for the first exercise
+
+    -   Consider if you want to have colors in this risk table - we have a legend inside the plot. Do what you find aesthetically most pleasing,
+
+-    wrap it up into a function (you can call it `atrisk_fun`).
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+atrisk_fun <- function(thisanalysis){
+  temp <- atrisk_risk |>
+    filter(analysis == thisanalysis)
+  ggplot(temp, aes(x = time, y = x, label = natrisk)) +
+    geom_text() +
+    theme_void(base_size = bsize) +
+    theme(axis.text.y = element_text(hjust = 1),
+          plot.title = element_text(hjust = -.1, size = bsize)) +
+    ggtitle("At risk")
+}
+```
+:::

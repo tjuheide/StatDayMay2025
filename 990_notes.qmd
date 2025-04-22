@@ -1,0 +1,13 @@
+---
+title: "Notes"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: true
+  message: false
+  warning: false
+---
+Concepts beyond the scope of this day.

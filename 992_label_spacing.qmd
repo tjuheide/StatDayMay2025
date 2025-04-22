@@ -1,0 +1,481 @@
+---
+title: "Cheap trick for label spacing"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: true
+  message: false
+  warning: false
+---
+### Spacing around text and labels
+
+Sometimes you might find that a label gets too close to something else.
+
+Below are versions of the plot-in-plot survival curves where the exposure group labels are placed differently in the risk table using different values of `hjust`.
+
+
+::: {.callout-note appearance="simple" icon="false"}
+
+```{r, echo =  FALSE}
+#| label: fig-hjust1
+#| fig-cap: |
+#|   Right-aligned labels (`hjust = 1`)
+
+library(ggplot2)
+library(patchwork)
+library(data.table)
+library(dplyr)
+library(pammtools)
+library(scales)
+
+bsize <- 15
+
+mypal <- c("#aaaaaa", "#af0000")
+
+survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  mutate(x = factor(
+    x,
+    levels = c(2,1),
+    labels = c("Control", "Intervention")
+  )) |>
+  filter(analysis == "Survival")
+
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+inner <- base +
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none",
+        axis.title = element_blank())
+
+outer <- base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", color = "", y = "Survival") +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "none")
+
+pip <- outer + inset_element(inner,
+                             left = .1,
+                             right = .97,
+                             top = .9,
+                             bottom = .05)
+
+atrisk_survival <- survival |>
+  filter(is.na(natrisk) == F) |>
+  select(x, time, natrisk)
+
+risktable <- ggplot(atrisk_survival, aes(x = time, y = x)) +
+  geom_text(aes(label = natrisk), show.legend = FALSE) +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal),
+        plot.title = element_text(hjust = -.1, size = bsize)) +
+  ggtitle("At risk")
+
+pipatrisk <- pip / risktable + plot_layout(heights = c(9,1))
+
+# move label on y-axis closer to the figure
+pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
+  theme(axis.title.y = element_text(vjust = -7))
+
+pipatrisk
+```
+:::
+
+::: {.callout-note appearance="simple" icon="false"}
+
+```{r, echo =  FALSE}
+#| label: fig-hjust0
+#| fig-cap: |
+#|   Left-aligned labels (`hjust = 0`)
+library(ggplot2)
+library(patchwork)
+library(data.table)
+library(dplyr)
+library(pammtools)
+library(scales)
+
+bsize <- 15
+
+mypal <- c("#aaaaaa", "#af0000")
+
+survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  mutate(x = factor(
+    x,
+    levels = c(2,1),
+    labels = c("Control", "Intervention")
+  )) |>
+  filter(analysis == "Survival")
+
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+inner <- base +
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none",
+        axis.title = element_blank())
+
+outer <- base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", color = "", y = "Survival") +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "none")
+
+pip <- outer + inset_element(inner,
+                             left = .1,
+                             right = .97,
+                             top = .9,
+                             bottom = .05)
+
+atrisk_survival <- survival |>
+  filter(is.na(natrisk) == F) |>
+  select(x, time, natrisk)
+
+risktable <- ggplot(atrisk_survival, aes(x = time, y = x)) +
+  geom_text(aes(label = natrisk), show.legend = FALSE) +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 0, color = mypal),
+        plot.title = element_text(hjust = -.1, size = bsize)) +
+  ggtitle("At risk")
+
+pipatrisk <- pip / risktable + plot_layout(heights = c(9,1))
+
+# move label on y-axis closer to the figure
+pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
+  theme(axis.title.y = element_text(vjust = -7))
+
+pipatrisk
+```
+:::
+
+::: {.callout-note appearance="simple" icon="false"}
+
+```{r, echo =  FALSE}
+#| label: fig-hjust05
+#| fig-cap: |
+#|   Center-aligned labels (`hjust = .5`)
+
+library(ggplot2)
+library(patchwork)
+library(data.table)
+library(dplyr)
+library(pammtools)
+library(scales)
+
+bsize <- 15
+
+mypal <- c("#aaaaaa", "#af0000")
+
+survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  mutate(x = factor(
+    x,
+    levels = c(2,1),
+    labels = c("Control", "Intervention")
+  )) |>
+  filter(analysis == "Survival")
+
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+inner <- base +
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none",
+        axis.title = element_blank())
+
+outer <- base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", color = "", y = "Survival") +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "none")
+
+pip <- outer + inset_element(inner,
+                             left = .1,
+                             right = .97,
+                             top = .9,
+                             bottom = .05)
+
+atrisk_survival <- survival |>
+  filter(is.na(natrisk) == F) |>
+  select(x, time, natrisk)
+
+risktable <- ggplot(atrisk_survival, aes(x = time, y = x)) +
+  geom_text(aes(label = natrisk), show.legend = FALSE) +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = .5, color = mypal),
+        plot.title = element_text(hjust = -.1, size = bsize)) +
+  ggtitle("At risk")
+
+pipatrisk <- pip / risktable + plot_layout(heights = c(9,1))
+
+# move label on y-axis closer to the figure
+pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
+  theme(axis.title.y = element_text(vjust = -7))
+
+pipatrisk
+```
+:::
+
+@fig-hjust1 with right aligned labels corresponds to the one you have made already. Here the labels might be a tad too close to the numbers in the risk table. One solution could be to left align the labels as in @fig-hjust0. However, the difference in distance between labels and numbers might be less aesthetically pleasing, and "Intervention" is still close to the text. @fig-hjust05 is just plain ugly. One cheap trick that is often worth remembering is to edit the labels of the data. I.e., if the labels had been specified as here
+
+```{r, eval = FALSE, echo = TRUE}
+survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  mutate(x = factor(
+    x,
+    levels = c(2,1),
+    # note the space after the labels
+    labels = c("Control ", "Intervention ")
+  )) |>
+  filter(analysis == "Survival")
+```
+
+then there is daylight between the labels and the numbers at risk as seen in @fig-hjust1space
+
+::: {.callout-note appearance="simple" icon="false"}
+## Cheap trick
+
+```{r, echo =  FALSE}
+#| label: fig-hjust1space
+#| fig-cap: |
+#|   Right-aligned labels (`hjust = 1`) with additional space in label
+
+library(ggplot2)
+library(patchwork)
+library(data.table)
+library(dplyr)
+library(pammtools)
+library(scales)
+
+bsize <- 15
+
+mypal <- c("#aaaaaa", "#af0000")
+
+survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  mutate(x = factor(
+    x,
+    levels = c(2,1),
+    labels = c("Control ", "Intervention ")
+  )) |>
+  filter(analysis == "Survival")
+
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+inner <- base +
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none",
+        axis.title = element_blank())
+
+outer <- base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", color = "", y = "Survival") +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "none")
+
+pip <- outer + inset_element(inner,
+                             left = .1,
+                             right = .97,
+                             top = .9,
+                             bottom = .05)
+
+atrisk_survival <- survival |>
+  filter(is.na(natrisk) == F) |>
+  select(x, time, natrisk)
+
+risktable <- ggplot(atrisk_survival, aes(x = time, y = x)) +
+  geom_text(aes(label = natrisk), show.legend = FALSE) +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal),
+        plot.title = element_text(hjust = -.1, size = bsize)) +
+  ggtitle("At risk")
+
+pipatrisk <- pip / risktable + plot_layout(heights = c(9,1))
+
+# move label on y-axis closer to the figure
+pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
+  theme(axis.title.y = element_text(vjust = -7))
+
+pipatrisk
+```
+:::
+
+A similar trick can be useful if you need to add space to the left. Suppose you have some time-trend data where there are too many groups to make a good palette, and you decide to remove the legend and instead insert the labels as text to the right of the figures where the individual lines end:
+```{r, eval = FALSE}
+library(ggplot2)
+
+# Some nonsensical data on time trends of something for various animals
+
+# First a table with an observation for each animal in each year
+set.seed(13)
+grid <- expand.grid(
+  Time = 2020:2025,
+  group = c(
+    "Cattle",
+    "Chickens",
+    "Pigs",
+    "Turkeys",
+    "Horses",
+    "Drop bears",
+    "Foxes",
+    "Guinea pigs",
+    "Herrings"
+  )
+)
+
+# A continuous outcome variable with random values
+grid$y <- runif(nrow(grid), 0, 10)
+
+# New group variable, constructed by adding some space before the text in the grouping variable
+grid$new_group <- paste(" ",grid$group)
+
+# Last observation per group (used to insert the text on the right of the lines)
+anno <- subset(grid, Time == 2025)
+
+# The plot where no space is included between lines and text.
+# Substitute group for new_group to get spacing.
+ggplot(grid, aes(x = Time, y = y, color = group)) +
+  theme_classic() +
+  theme(legend.position = "none",
+        # expanding margins to the right to make room for the labels
+        plot.margin = margin(t = 0,  
+                             r = 2,  
+                             b = 0,  
+                             l = 0,
+                             unit = "cm")) +
+  # setting clip = "off" means the text in the margin will not be cut
+  coord_cartesian(clip = "off") +
+  geom_line(linewidth = 1.5) +
+  geom_text(data = anno,
+            aes(label = group),
+            hjust = 0)
+
+```
+
+::: {.callout-note appearance="simple" icon="false"}
+## Labels too close to lines using the variable `group`
+```{r, echo = FALSE}
+library(ggplot2)
+#| label: fig-timetrend1
+#| fig-cap: |
+#|   Too many groups to tell colors apart
+
+
+# some non-sensical data
+set.seed(13)
+grid <- expand.grid(
+  Time = 2020:2025,
+  group = c(
+    "Cattle",
+    "Chickens",
+    "Pigs",
+    "Turkeys",
+    "Horses",
+    "Drop bears",
+    "Foxes",
+    "Guinea pigs",
+    "Herrings"
+  )
+)
+grid$y <- runif(nrow(grid), 0, 10)
+
+# adding a space before the text
+grid$new_group <- paste(" ",grid$group)
+
+# last observation per group
+anno <- subset(grid, Time == 2025)
+
+ggplot(grid, aes(x = Time, y = y, color = group)) +
+  theme_classic() +
+  theme(legend.position = "none",
+        plot.margin = margin(t = 0,  
+                             r = 2,  
+                             b = 0,  
+                             l = 0,
+                             unit = "cm")) +
+  coord_cartesian(clip = "off") +
+  geom_line(linewidth = 1.5) +
+  geom_text(data = anno,
+            aes(label = group),
+            hjust = 0)
+
+```
+:::
+
+::: {.callout-note appearance="simple" icon="false"}
+## Labels positioned better using the variable `new_group`
+```{r, echo = FALSE}
+library(ggplot2)
+#| label: fig-timetrend2
+#| fig-cap: |
+#|   Too many groups to tell colors apart - with leading space
+
+
+# some non-sensical data
+set.seed(13)
+grid <- expand.grid(
+  Time = 2020:2025,
+  group = c(
+    "Cattle",
+    "Chickens",
+    "Pigs",
+    "Turkeys",
+    "Horses",
+    "Drop bears",
+    "Foxes",
+    "Guinea pigs",
+    "Herrings"
+  )
+)
+grid$y <- runif(nrow(grid), 0, 10)
+
+# adding a space before the text
+grid$new_group <- paste(" ",grid$group)
+
+# last observation per group
+anno <- subset(grid, Time == 2025)
+
+ggplot(grid, aes(x = Time, y = y, color = new_group)) +
+  theme_classic() +
+  theme(legend.position = "none",
+        plot.margin = margin(t = 0,  
+                             r = 2,  
+                             b = 0,  
+                             l = 0,
+                             unit = "cm")) +
+  coord_cartesian(clip = "off") +
+  geom_line(linewidth = 1.5) +
+  geom_text(data = anno,
+            aes(label = new_group),
+            hjust = 0)
+
+```
+:::

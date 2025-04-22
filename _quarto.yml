@@ -1,0 +1,34 @@
+project: 
+  type: website
+  output-dir: docs
+  
+website:
+  title: "Risk curves in R"
+  sidebar: 
+    style: "docked"
+    search: true
+    contents: 
+      - section: "Plot in plot"
+        href: 010_front.qmd
+        contents: 
+          - 011_load_pkg_and_data.qmd
+          - 012_risk_plot.qmd
+          - 013_plot_in_plot.qmd
+          - 014_risk_table.qmd
+          - 015_patch.qmd
+      - section: "Plots in panels"
+        href: 020_front.qmd
+        contents: 
+          - 021_load_pkg_and_data.qmd
+          - 022_risk_curve_function.qmd
+          - 023_risk_table_function.qmd
+          - 024_patch.qmd
+      - section: "Notes"
+        href: 990_notes.qmd
+        contents: 
+          - 991_global_options.qmd
+          - 992_label_spacing.qmd
+      
+format:
+  html: 
+    theme: united

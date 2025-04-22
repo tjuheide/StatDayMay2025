@@ -1,0 +1,98 @@
+---
+title: "Creating and patching plot components"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: false
+  message: false
+  warning: false
+---
+
+### Putting it all together
+Run each of your 2 functions on each of the analyses (`"Plague"` and `"Cholera"`). When you apply the function you can make the result into an object in your environment.
+
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+For Plague you can get a plot that you can edit further as such:
+```{r}
+Plague_curves <- risk_fun("Plague")
+```
+:::
+
+::: {.callout-note appearance="simple"}
+## Why 2 functions
+
+We could have included the functionality of `atrisk_fun()` into `risk_fun()`, and you might want to do that in real projects (or as you go along here). However, there are a few quirks of patchwork that it might be relevant to look into outside of a function.
+:::
+
+#### Risk curves and tables combined for each outcome
+Assuming you have created objects `Plague_curves`, `Plague_table`, `Cholera_curves`, and `Cholera_table`  (the names will be used below, but use whichever makes sense to you), we can now patch these together. First we will make risk curves with risk tables for one outcome, then for the other, then we will combine everything.
+
+Put the risk curves on top of the at risk table, as you have done before, for Plague and Cholera separately. Remember to specify the relative heights. Move the y-axis title closer to the plot.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution (Plague)
+
+```{r}
+Plague <- Plague_curves / Plague_table + 
+  plot_layout(heights = c(9,1))
+
+Plague[[1]] <- Plague[[1]] +
+  theme(axis.title.y = element_text(vjust = -10))
+```
+Do the same for Cholera - this could have been part of a function.
+:::
+
+#### Getting each patchworks to act as one plot - not two plots stitched together
+
+We want to annotate our plots by giving each panel an index (letter, number, ...) we can refer to. If we blindly put together the 2 patchworks of 2 plots the result will be considered a combination of 4 plots and each will get its own symbol (both plots with curves and risk tables). To prevent that we can use the function `wrap_elements()` on each of our 2 patchworks.
+
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution (Plague)
+
+```{r}
+Plague <- wrap_elements(Plague)
+```
+Do the same for Cholera - this could also have been part of a function.
+:::
+
+#### Patching the two outcome figures and adding annotation
+We are now ready to patch the resulting plots, that now each behave as if they were just one plot.
+
+This can be done by the code `Plague + Cholera` or `Plague | Cholera`, there should not be a difference in this exercise.
+
+However, when we add annotation it is important to have the code combining the plots in parentheses, so be sure to do that.
+
+We can add annotation using the function `plot_annotation()` which has a parameter called `tag_level` that takes values `"A"`, `"a"`, `"1"`, `"I"` and` "i"` to determine which index you want to use. (You can also specify `prefix` and `suffix` if you want an index like `Fig 1:`.)
+
+Put together the 2 plots, and add annotation.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+(Plague | Cholera) +
+  plot_annotation(tag_level = "A")
+```
+:::
+
+#### Finishing touches: positioning the tags
+The tags are perhaps a bit far from the plots (the annotation for the second panel is perhaps too close to the first panel). We can move the tags by adding a custom theme to the above plot. Note that here we need to use `&` instead of `+` when we add this custom theme to get it to work on both plots.
+
+In the custom theme you can specify `plot.tag.position` in a similar way as we have moved a legend by `legend.position.inside`. Do that.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+(Plague | Cholera) +
+  plot_annotation(tag_level = "A") &
+  theme(plot.tag.position = c(.1, 1))
+```
+:::

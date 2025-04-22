@@ -1,0 +1,218 @@
+---
+title: "Plot within plot"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: false
+  message: false
+  warning: false
+---
+
+### Inserting one plot into another
+Here we modify the base plot in 2 ways to get different versions of the same plot - `inner` and `outer`. We then insert one into the other.
+
+We start by making the inner plot, we do this in 3 steps:
+
+#### A theme template for the inner plot
+First we specify which built-in theme from `ggplot2` we want to use as our template.
+
+Make a new plot by modifying `base`, i.e., add `theme_minimal(base_size = bsize)`. The new plot should not overwrite `base`.
+
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+```{r}
+base + 
+  theme_minimal(base_size = bsize)
+```
+:::
+
+#### Removing the legend
+Second, we want to remove the figure legend. We can edit the position of the legend by specifying `legend.position` to be `"none"` in a custom theme.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+You can make a custom theme using the function `theme`. In this function you can specify `legend.position`.
+
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+base +
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none")
+```
+:::
+
+#### Remove axis titles
+Third, we want to remove titles on the x- and y-axes. To do this you need to set `axis.title` to `element_blank()` in your custom theme. Make this plot an object with the name `inner`.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+Remember to separate the specification of `legend.position` and `axis.title` by a comma.
+
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+inner <- base +
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none",
+        axis.title = element_blank())
+```
+:::
+
+::: {.callout-important appearance="default"}
+## Built-in and custom themes
+
+If you specify your custom theme before a built-in theme, the built-in theme will overrule your customization.
+:::
+
+We now turn to the outer plot.
+
+#### Setting the range of the y-axis for the outer plot
+Again we start from `base` and we now make the y-axis go from 0 to 1 (the labels will be 0% to 100%).
+
+To specify the range on the axes we use `coord_cartesian()`. In this you can specify `ylim` which should be a vector of length 2 with values 0 and 1.
+
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint 1
+
+Add `coord_cartesian()` to `base`, specify `ylim` within `coord_cartesian()`.
+
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint 2
+
+To create a vector use the function `c()`. Write the values to be used in the vector separated by comma.
+
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+base +
+  coord_cartesian(ylim = c(0, 1))
+```
+:::
+
+#### Specifying axis titles
+We want the titles on the axes to be formatted better. We can do that with the function `labs()`. Within `labs()` specify parameters `x` and `y` with whatever titles you want to have on the x- and y-axes, e.g., Time and Survival.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+Remember quotation marks around the strings used to specify `x` and `y`.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", y = "Survival")
+```
+:::
+
+#### Adding a theme template
+As for the inner plot we want to use a built-in theme as a template and remove the legend. Use the built-in theme `theme_classic()` (specifying `base_size`) like you used `theme_minimal()` for the inner plot. Also, remove the legend like you did for the inner plot. Make the resulting plot an object called `outer`.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+outer <- base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", color = "", y = "Survival") +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "none")
+```
+:::
+
+#### Inserting one plot into the other
+The third and final step in inserting one plot into another is to use the function `inset_element()` from the `patchwork` package.
+
+Start with `outer` add the `inset_element()`-function with the first parameter set to `inner`. Also specify the parameters `left`, `right`, `top` and `bottom` as numeric values between 0 and 1, declaring where `inner` should be inserted inside `outer`.
+
+When you are happy with your choice of parameters make the result an object called `pip`.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+pip <- outer + inset_element(inner,
+                             left = .1,
+                             right = .97,
+                             top = .9,
+                             bottom = .05)
+```
+:::
+
+#### The resulting plot within plot
+Your current plot should something like this:
+
+::: {.callout-note collapse="true" appearance="default" icon=false}
+## Show plot
+```{r, echo = FALSE, eval = TRUE}
+library(ggplot2)
+library(patchwork)
+library(data.table)
+library(dplyr)
+library(pammtools)
+library(scales)
+
+survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  mutate(x = factor(
+    x,
+    levels = c(2,1),
+    labels = c("Control", "Intervention")
+  )) |>
+  filter(analysis == "Survival")
+
+bsize <- 15
+
+mypal <- c("#aaaaaa", "#af0000")
+
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+inner <- base +
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none",
+        axis.title = element_blank())
+
+outer <- base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", color = "", y = "Survival") +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "none")
+
+
+pip <- outer + inset_element(inner,
+                             left = .1,
+                             right = .97,
+                             top = .9,
+                             bottom = .05)
+
+pip
+```
+:::

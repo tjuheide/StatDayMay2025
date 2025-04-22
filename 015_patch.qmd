@@ -1,0 +1,158 @@
+---
+title: "Patch risk curves and -table"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: false
+  message: false
+  warning: false
+---
+### Patching the curves and the risk table
+The final step is done using `patchwork` once again. To put one plot-object (of `ggplot`-type) on top of another simply write them separated by a forward slash (`/`). Put `pip` on top of `risktable`
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+pip / risktable
+```
+:::
+
+#### Specifying relative heights of plots
+This does not look particularly good. We need the curves to make up most of the figure. We can set the relative heights between different rows using the function `plot_layout()`. Add `plot_layout()` with the parameter `heights` specified as a numerical vector with the same length as there are rows in the plot (in this case 2). The numerical values do not have to add up to 1 / 100%. If the values are `x` and `1` then the height of the first row will be `x` times the height of the second. When you are happy with the plot make it an object called pipatrisk.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+pipatrisk <- pip / risktable + plot_layout(heights = c(9,1))
+```
+:::
+
+#### Move the y-axis title closer to the plot
+One last thing, the title on the y-axis of the risk curves is a bit far away from the plot. We can move it to a better location. To do this we need to edit the first element (`outer`) of the first element (`pip`) of the final plot (`pipatrisk` - @fig-pipatrisklevels).
+
+```{r, eval = TRUE, echo = FALSE}
+#| label: fig-pipatrisklevels
+#| fig-cap: |
+#|   The components of plot `pipatrisk`
+library(ggplot2)
+
+data <- data.frame(node = c("pipatrisk", "1: pip", "1.1: outer", "1.2: inner", "2: atrisk"),
+                   x = c(0, -1, -1.5, -.5, 1),
+                   y = .7 * c(0, -1, -2, -2, -1))
+
+segments <- data.frame(x = c(0, -1, -1, 1, -1, -1.5, -1.5, -.5),
+                       xend = c(0, 1, -1, 1, -1, -.5, -1.5, -.5),
+                       y = .7 * c(0, -.5, -.5, -.5, -.5, -1.5, -1.5, -1.5),
+                       yend = .7 * c(-.5, -.5, -1, -1, -1.5, -1.5, -2, -2))
+
+ggplot(data, aes(x = x, y = y)) +
+  geom_segment(data = segments, aes(xend = xend, yend = yend)) +
+  geom_label(aes(label = node),
+             label.padding = unit(.5, "lines"),
+             fill = "white",
+             label.size = 0,
+             size = 7.5) +
+  theme_void() +
+  coord_cartesian(xlim = c(-2, 1.5))
+
+```
+
+Specifically we need to add a custom theme in which `axis.title.y` is modified by `element_text()` in which `vjust` can be set to a sufficient number.
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Hint
+
+You can reference (and modify) the first element of the first element of the plot by expanding on this syntax:
+
+```{r}
+pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] + ...
+```
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
+## Solution
+
+```{r}
+# move label on y-axis closer to the figure
+pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
+  theme(axis.title.y = element_text(vjust = -7))
+```
+:::
+
+#### Party time!
+Your plot is now done, and you can save it using `ggsave` or other devises.
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo = FALSE, eval = TRUE}
+library(ggplot2)
+library(patchwork)
+library(data.table)
+library(dplyr)
+library(pammtools)
+library(scales)
+
+survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
+  mutate(x = factor(
+    x,
+    levels = c(2,1),
+    labels = c("Control", "Intervention")
+  )) |>
+  filter(analysis == "Survival")
+
+bsize <- 15
+
+mypal <- c("#aaaaaa", "#af0000")
+
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+inner <- base +
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none",
+        axis.title = element_blank())
+
+outer <- base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", color = "", y = "Survival") +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "none")
+
+
+pip <- outer + inset_element(inner,
+                             left = .1,
+                             right = .97,
+                             top = .9,
+                             bottom = .05)
+
+atrisk_survival <- survival |>
+  filter(is.na(natrisk) == F) |>
+  select(x, time, natrisk)
+
+risktable <- ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text() +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal),
+        plot.title = element_text(hjust = -.1, size = bsize)) +
+  ggtitle("At risk")
+
+pipatrisk <- pip / risktable + plot_layout(heights = c(9,1))
+
+pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
+  theme(axis.title.y = element_text(vjust = -7))
+
+pipatrisk
+```
+:::
