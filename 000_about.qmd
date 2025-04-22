@@ -1,0 +1,16 @@
+---
+title: "Risk curves in R"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: true
+  message: false
+  warning: false
+---
+
+### About
+
+This site is a brief walk-through of how various types of risk curves can be made in R. The focus is on the graphical rather than analytical aspects. I.e., we start from a dataset that has been analysed and cleaned and is ready to be plotted. The data can be found [here](https://github.com/tjuheide/StatDayMay2025/blob/main/data/riskdata.csv).

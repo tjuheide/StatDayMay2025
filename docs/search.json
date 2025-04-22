@@ -76,6 +76,16 @@
     ]
   },
   {
+    "objectID": "000_about.html",
+    "href": "000_about.html",
+    "title": "Risk curves in R",
+    "section": "",
+    "text": "About\nThis site is a brief walk-through of how various types of risk curves can be made in R. The focus is on the graphical rather than analytical aspects. I.e., we start from a dataset that has been analysed and cleaned and is ready to be plotted. The data can be found here.",
+    "crumbs": [
+      "About"
+    ]
+  },
+  {
     "objectID": "012_risk_plot.html",
     "href": "012_risk_plot.html",
     "title": "The base Kaplan-Meier plot",

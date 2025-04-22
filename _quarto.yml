@@ -8,6 +8,8 @@ website:
     style: "docked"
     search: true
     contents: 
+      - section: "About"
+        href: 000_about.qmd
       - section: "Plot in plot"
         href: 010_front.qmd
         contents: 
