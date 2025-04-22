@@ -396,13 +396,13 @@ grid <- expand.grid(
   group = c(
     "Cattle",
     "Chickens",
-    "Pigs",
-    "Turkeys",
-    "Horses",
     "Drop bears",
     "Foxes",
     "Guinea pigs",
-    "Herrings"
+    "Herrings",
+    "Horses",
+    "Pigs",
+    "Turkeys"
   )
 )
 grid$y <- runif(nrow(grid), 0, 10)
@@ -446,13 +446,13 @@ grid <- expand.grid(
   group = c(
     "Cattle",
     "Chickens",
-    "Pigs",
-    "Turkeys",
-    "Horses",
     "Drop bears",
     "Foxes",
     "Guinea pigs",
-    "Herrings"
+    "Herrings",
+    "Horses",
+    "Pigs",
+    "Turkeys"
   )
 )
 grid$y <- runif(nrow(grid), 0, 10)
