@@ -29,7 +29,7 @@ library(scales)
 
 We load data with the function `fread()` (**f**ast **read**) from the mighty `data.table` package. We do a bit of data management with functions from the very user-friendly (but less efficient) package `dplyr`.
 
-Below labels are set for the exposure variable, you may use different labels if you have other preferences.
+Below, we set labels for the exposure variable, you may use different labels if you have other preferences.
 
 The data set contains results for different analyses, presently we only need data for overall survival. We filter (restrict) to get the relevant data.
 
@@ -44,17 +44,17 @@ survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curv
 
 ```
 
-#### Global preferences
+#### Global values
 
-Set preferences for base size in plots (this will affect sizes of axis titles and labels, legends, etc. but not the size of elements within the plot) and specify your 2 favorite colors for plotting curves.
+Set preferences for base size (this will affect sizes of axis titles and labels, legends, etc. but not the size of elements within the plot) and specify your 2 favorite colors for plotting curves. These preferences will be used in all plots.
 
-The base size determines how large text in the plot will be.
+Base size:
 
 ```{r}
 bsize <- 15
 ```
 
-[There are many different named colors](https://debruine.github.io/30DCC-2022/app-a-colours.html):
+There are many different [named colors](https://debruine.github.io/30DCC-2022/app-a-colours.html), e.g:
 
 ```{r}
 mypal <- c("navajowhite", "firebrick")
@@ -65,3 +65,5 @@ You can use hex codes if you want to be specific about which colors to use:
 ```{r}
 mypal <- c("#aaaaaa", "#af0000")
 ```
+
+Whenever we need to set the base size or specify colors in the following, we can use `bsize` and `mypal`. The upshot of specifying these values is that if we want to change the base size or the colors, we need to do so only once.

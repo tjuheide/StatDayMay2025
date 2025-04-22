@@ -138,19 +138,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">About</span></span>
-  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./000_about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Risk curves in R</span></a>
+  </div>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./010_front.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Plot in plot</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./011_load_pkg_and_data.html" class="sidebar-item-text sidebar-link">
@@ -187,11 +189,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./020_front.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Plots in panels</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./021_load_pkg_and_data.html" class="sidebar-item-text sidebar-link">
@@ -222,11 +224,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./990_notes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Notes</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./991_global_options.html" class="sidebar-item-text sidebar-link">
@@ -466,7 +468,7 @@ Solution
 </section>
 <section id="layered-graphics" class="level4">
 <h4 class="anchored" data-anchor-id="layered-graphics">Layered graphics</h4>
-<p>If you added <code>geom_stepribbon()</code> as the last line in your plot you will notice it covers (hides) the risk curves. We want the ribbons to be behind the curves, and we can achieve this by reversing the order of <code>geom_step()</code> and <code>geom_stepribbon()</code>. Do that.</p>
+<p>If you added <code>geom_stepribbon()</code> as the last line in your plot, you will notice it covers (hides) the risk curves. We want the ribbons to be behind the curves, and we can achieve this by reversing the order of <code>geom_step()</code> and <code>geom_stepribbon()</code>. Do that.</p>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -506,7 +508,7 @@ Solution
 </section>
 <section id="remove-part-of-the-legend" class="level4">
 <h4 class="anchored" data-anchor-id="remove-part-of-the-legend">Remove part of the legend</h4>
-<p>Notice that the legend now has a dark background - <code>geom_stepribbon()</code> is also included in the legend. We don’t want that (well, you might but for the sake of the exercise you don’t).</p>
+<p>Notice that the legend now has a dark background - <code>geom_stepribbon()</code> is also included in the legend. We don’t want that (well, you might - but for the sake of this exercise you don’t).</p>
 <p>We can prevent <code>geom_stepribbon()</code> from transmitting to the legend by setting the parameter <code>show.legend</code> to <code>FALSE</code> within <code>geom_stepribbon()</code>.</p>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
@@ -564,7 +566,7 @@ Solution
 </section>
 <section id="coloring-areas-using-fill" class="level4">
 <h4 class="anchored" data-anchor-id="coloring-areas-using-fill">Coloring areas using <code>fill</code></h4>
-<p>We also want the fill of the ribbons to be colored, we can achieve this by specifying the aesthetic <code>fill</code> - do that. (As for <code>ymin</code> and <code>ymax</code>, <code>fill</code> can be specified locally or globally, it should not make a difference in this exercise as <code>fill</code> is not used elsewhere.)</p>
+<p>We also want the fill of the ribbons to be colored. We can achieve this by specifying the aesthetic <code>fill</code> - do that. (As for <code>ymin</code> and <code>ymax</code>, <code>fill</code> can be specified locally or globally, it should not make a difference in this exercise as <code>fill</code> is not used elsewhere.)</p>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -605,7 +607,7 @@ Solution
 </section>
 <section id="transparency-of-areas-using-alpha" class="level4">
 <h4 class="anchored" data-anchor-id="transparency-of-areas-using-alpha">Transparency of areas using <code>alpha</code></h4>
-<p>Whoops, now we can’t see the actual curves. Better add some transparency to the ribbons. Do that by specifying the parameter <code>alpha</code> within <code>geom_stepribbon()</code>, e.g., set it to .2 (20% opacity / 80% transparency), or some other value of your preference.</p>
+<p>Whoops, now we can’t see the actual curves. Better add some transparency to the ribbons. Do that by specifying the parameter <code>alpha</code> within <code>geom_stepribbon()</code>, e.g., set it to <code>.2</code> (20% opacity / 80% transparency), or some other value of your preference.</p>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -785,7 +787,7 @@ Solution
 </section>
 <section id="creating-the-object-base" class="level4">
 <h4 class="anchored" data-anchor-id="creating-the-object-base">Creating the object <code>base</code></h4>
-<p>The last thing there is to do is to make the plot into an object which you should name <code>base</code> (for internal consistency of this exercise - this name is not important in itself).</p>
+<p>The last thing to do, is to make the plot into an object which you should name <code>base</code> (for internal consistency of this exercise - this name is not important in itself).</p>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">

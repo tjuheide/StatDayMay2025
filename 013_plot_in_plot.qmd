@@ -74,7 +74,7 @@ inner <- base +
 ::: {.callout-important appearance="default"}
 ## Built-in and custom themes
 
-If you specify your custom theme before a built-in theme, the built-in theme will overrule your customization.
+If you specify your custom theme before a built-in theme, i.e., reverse their order, the built-in theme will overrule your customization.
 :::
 
 We now turn to the outer plot.

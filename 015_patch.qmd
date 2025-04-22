@@ -62,7 +62,7 @@ ggplot(data, aes(x = x, y = y)) +
 
 ```
 
-Specifically we need to add a custom theme in which `axis.title.y` is modified by `element_text()` in which `vjust` can be set to a sufficient number.
+Specifically we need to add a custom theme in which `axis.title.y` is modified by `element_text()` in which `vjust` can be set to an appropriate number.
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Hint
@@ -85,7 +85,7 @@ pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
 :::
 
 #### Party time!
-Your plot is now done, and you can save it using `ggsave` or other devises.
+Your plot is now done, and you can save it using `ggsave()` or other devises.
 
 ::: {.callout-note collapse="true" appearance="default" icon="false"}
 ## Show plot

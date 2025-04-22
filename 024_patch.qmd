@@ -31,7 +31,7 @@ We could have included the functionality of `atrisk_fun()` into `risk_fun()`, an
 :::
 
 #### Risk curves and tables combined for each outcome
-Assuming you have created objects `Plague_curves`, `Plague_table`, `Cholera_curves`, and `Cholera_table`  (the names will be used below, but use whichever makes sense to you), we can now patch these together. First we will make risk curves with risk tables for one outcome, then for the other, then we will combine everything.
+Assuming you have created objects `Plague_curves`, `Plague_table`, `Cholera_curves`, and `Cholera_table`  (the names will be used below, but use whichever make sense to you), we can now patch these together. First we will make risk curves with risk tables for one outcome, then for the other, then we will combine everything.
 
 Put the risk curves on top of the at risk table, as you have done before, for Plague and Cholera separately. Remember to specify the relative heights. Move the y-axis title closer to the plot.
 
@@ -67,7 +67,7 @@ We are now ready to patch the resulting plots, that now each behave as if they w
 
 This can be done by the code `Plague + Cholera` or `Plague | Cholera`, there should not be a difference in this exercise.
 
-However, when we add annotation it is important to have the code combining the plots in parentheses, so be sure to do that.
+However, when we add annotation it is important to have the code combining the plots in parentheses, e.g., `(Plague + Cholera)`, so be sure to do that.
 
 We can add annotation using the function `plot_annotation()` which has a parameter called `tag_level` that takes values `"A"`, `"a"`, `"1"`, `"I"` and` "i"` to determine which index you want to use. (You can also specify `prefix` and `suffix` if you want an index like `Fig 1:`.)
 
@@ -96,3 +96,5 @@ In the custom theme you can specify `plot.tag.position` in a similar way as we h
   theme(plot.tag.position = c(.1, 1))
 ```
 :::
+
+Are the labels a bit close to the numbers in the at risk table? Check out the [cheap trick](https://tjuheide.github.io/StatDayMay2025/992_label_spacing.html) in the notes.

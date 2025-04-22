@@ -11,7 +11,7 @@ execute:
   warning: false
 ---
 ### Avoid repetitions - use functions
-In `SAS` we have macros, `R` lets us use function. Here we aim to develop a function which will let us make a risk plot for a specified value of `analysis` in our `risk` data set.
+In `SAS` we have macros, `R` lets us use functions. Here we aim to develop a function which will let us make a risk plot for a specified value of `analysis` in our `risk` data set.
 
 The first step is to develop one of the plots, then we wrap a function around the code (as you might also do when developing macros), finally we call the function for each value of `analysis`.
 

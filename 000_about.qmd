@@ -13,4 +13,8 @@ execute:
 
 ### About
 
-This site is a brief walk-through of how various types of risk curves can be made in R. The focus is on the graphical rather than analytical aspects. I.e., we start from a dataset that has been analysed and cleaned and is ready to be plotted. The data can be found [here](https://github.com/tjuheide/StatDayMay2025/blob/main/data/riskdata.csv).
+This site is a brief walk-through of how various types of risk curves can be made in R. The focus is on the graphical rather than analytical aspects. I.e., we start from a dataset that has been analysed and cleaned and is ready to be plotted.
+
+`SAS` will be mentioned a few times but no knowledge of `SAS` is needed. However, it is assumed that the reader has some prior knowledge of `ggplot2`.
+
+The data can be found [here](https://github.com/tjuheide/StatDayMay2025/blob/main/data/riskdata.csv), scripts are [here](https://github.com/tjuheide/StatDayMay2025).

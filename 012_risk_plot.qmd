@@ -126,7 +126,7 @@ In our example it makes no difference, as no other `geom_`s in this plot require
 :::
 
 #### Layered graphics
-If you added `geom_stepribbon()` as the last line in your plot you will notice it covers (hides) the risk curves. We want the ribbons to be behind the curves, and we can achieve this by reversing the order of `geom_step()` and `geom_stepribbon()`. Do that.
+If you added `geom_stepribbon()` as the last line in your plot, you will notice it covers (hides) the risk curves. We want the ribbons to be behind the curves, and we can achieve this by reversing the order of `geom_step()` and `geom_stepribbon()`. Do that.
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Hint
@@ -146,7 +146,7 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
 :::
 
 #### Remove part of the legend
-Notice that the legend now has a dark background - `geom_stepribbon()` is also included in the legend. We don't want that (well, you might but for the sake of the exercise you don't).
+Notice that the legend now has a dark background - `geom_stepribbon()` is also included in the legend. We don't want that (well, you might - but for the sake of this exercise you don't).
 
 We can prevent `geom_stepribbon()` from transmitting to the legend by setting the parameter `show.legend` to `FALSE` within `geom_stepribbon()`.
 
@@ -174,7 +174,7 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
 :::
 
 #### Coloring areas using `fill`
-We also want the fill of the ribbons to be colored, we can achieve this by specifying the aesthetic `fill` - do that. (As for `ymin` and `ymax`, `fill` can be specified locally or globally, it should not make a difference in this exercise as `fill` is not used elsewhere.)
+We also want the fill of the ribbons to be colored. We can achieve this by specifying the aesthetic `fill` - do that. (As for `ymin` and `ymax`, `fill` can be specified locally or globally, it should not make a difference in this exercise as `fill` is not used elsewhere.)
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Hint
@@ -194,7 +194,7 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
 :::
 
 #### Transparency of areas using `alpha`
-Whoops, now we can't see the actual curves. Better add some transparency to the ribbons. Do that by specifying the parameter `alpha` within `geom_stepribbon()`, e.g., set it to .2 (20% opacity / 80% transparency), or some other value of your preference.
+Whoops, now we can't see the actual curves. Better add some transparency to the ribbons. Do that by specifying the parameter `alpha` within `geom_stepribbon()`, e.g., set it to `.2` (20% opacity / 80% transparency), or some other value of your preference.
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Hint
@@ -291,7 +291,7 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
 :::
 
 #### Creating the object `base`
-The last thing there is to do is to make the plot into an object which you should name `base` (for internal consistency of this exercise - this name is not important in itself).
+The last thing to do, is to make the plot into an object which you should name `base` (for internal consistency of this exercise - this name is not important in itself).
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Hint
