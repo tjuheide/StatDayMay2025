@@ -30,15 +30,9 @@ At this point you should should get something rather confused looking - two surv
 ## Show plot
 
 ```{r, echo=FALSE, eval=TRUE}
-survival <- data.table::fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
-  dplyr::mutate(x = factor(
-    x,
-    levels = c(2,1),
-    labels = c("Control", "Intervention")
-  )) |>
-  dplyr::filter(analysis == "Survival")
-ggplot2::ggplot(survival, ggplot2::aes(x = time, y = estimate)) +
-  ggplot2::geom_step()
+source("xx_generics.r")
+ggplot(survival, aes(x = time, y = estimate)) +
+  geom_step()
 ```
 :::
 
@@ -58,6 +52,10 @@ The variable you need to use is the one indicating the exposure group.
 ggplot(survival, aes(x = time, y = estimate, color = x)) +
   geom_step()
 ```
+:::
+
+::: {.callout-note appearance="simple"}
+There are [other methods](992_separating_lines.qmd) for creating separate curves for separate groups, which you may want to look into at some other time.
 :::
 
 #### Thicker lines
@@ -174,7 +172,7 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
 :::
 
 #### Coloring areas using `fill`
-We also want the fill of the ribbons to be colored. We can achieve this by specifying the aesthetic `fill` - do that. (As for `ymin` and `ymax`, `fill` can be specified locally or globally, it should not make a difference in this exercise as `fill` is not used elsewhere.)
+We also want the fill of the ribbons to be colored according to the exposure. We can achieve this by specifying the aesthetic `fill` - do that. (As for `ymin` and `ymax`, `fill` can be specified locally or globally, it should not make a difference in this exercise as `fill` is not used elsewhere.)
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Hint
@@ -266,7 +264,7 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
 :::
 
 #### Adding % to tick labels 
-As a final step in making the base plot, i.e., the plot we will use to insert one plot into the other, we want to convert the y-axis to a percent-scale. We can do this using the function `percent_format()` from the `scales` package within the function `scale_y_continuous()` from `ggplot2`. Specifically we need to specify that the parameter `labels` in `scale_y_continuous()` should be `percent_format(accuracy = 1)`. Try playing with accuracy to see what it does (or check the documentation).
+As a final step in making the base plot, i.e., the plot we will use to insert one plot into the other, we want to convert the y-axis to a percent-scale. We can do this using the function `percent_format()` from the `scales` package within the function `scale_y_continuous()` from `ggplot2`. Specifically, we need to specify that the parameter `labels` in `scale_y_continuous()` should be `percent_format(accuracy = 1)`. Try playing with accuracy to see what it does (or check the documentation).
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Hint
@@ -322,22 +320,7 @@ At this point you should have a plot looking somewhat like this (choice of color
 ## Show plot
 
 ```{r, echo = FALSE, eval = TRUE}
-library(ggplot2)
-library(patchwork)
-library(data.table)
-library(dplyr)
-library(pammtools)
-library(scales)
-
-survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
-  mutate(x = factor(
-    x,
-    levels = c(2,1),
-    labels = c("Control", "Intervention")
-  )) |>
-  filter(analysis == "Survival")
-
-mypal <- c("#aaaaaa", "#af0000")
+source("xx_generics.r")
 
 ggplot(survival, aes(x = time, y = estimate, color = x)) +
   geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),

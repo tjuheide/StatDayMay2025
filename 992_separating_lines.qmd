@@ -1,0 +1,88 @@
+---
+title: "Separating lines"
+format:
+  html:
+    self-contained: true
+    code-copy: true
+
+execute:
+  eval: true
+  message: false
+  warning: false
+---
+### Methods for separating lines for separate groups
+
+If you do not want to use, or rely on colors when drawing curves for distinct groups, you can use other aesthetics. Specifying `linetype = x` instead of (@fig-linetype_no_color) or in combination with (@fig-linetype_and_color) `color = x` will apply different types of lines for different levels of `x`.
+
+```{r, echo = FALSE, eval = TRUE}
+#| label: fig-linetype_no_color
+#| fig-cap: |
+#|   `linetype` used without `color` or `fill`
+
+source("xx_generics.r")
+
+ggplot(survival, aes(x = time, y = estimate, linetype = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 1.5) +
+  theme_classic(base_size = bsize) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  labs(x = "Time", y = "Survival") +
+  theme(legend.position = "inside",
+        legend.position.inside = c(.8,.8),
+        legend.title = element_blank())
+```
+
+```{r, echo = FALSE, eval = TRUE}
+#| label: fig-linetype_and_color
+#| fig-cap: |
+#|   `linetype` used in combination with `color`
+
+source("xx_generics.r")
+
+ggplot(survival, aes(x = time, y = estimate, linetype = x, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 1.5) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  theme_classic(base_size = bsize) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  labs(x = "Time", y = "Survival") +
+  theme(legend.position = "inside",
+        legend.position.inside = c(.8,.8),
+        legend.title = element_blank())
+
+lt <- ggplot(survival, aes(x = time, y = estimate, linetype = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 1.5) +
+  theme_classic(base_size = bsize) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  labs(x = "Time", y = "Survival") +
+  theme(legend.position = "inside",
+        legend.position.inside = c(.8,.8),
+        legend.title = element_blank())
+```
+
+Another possibility is to use the `group`-aesthetic as in @fig-group. In itself, this will make a separate line for each level of the exposure variable `x` with the same color and line type. I.e., there will be no distinguishing feature and no legend, which is not particularly useful in the current setup, though it can be useful in other settings.
+
+```{r, echo = FALSE, eval = TRUE}
+#| label: fig-group
+#| fig-cap: |
+#|   When using `group` there are no distinguishing features
+
+source("xx_generics.r")
+
+ggplot(survival, aes(x = time, y = estimate, group = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 1.5) +
+  theme_classic(base_size = bsize) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  labs(x = "Time", y = "Survival") 
+```

@@ -67,3 +67,5 @@ mypal <- c("#aaaaaa", "#af0000")
 ```
 
 Whenever we need to set the base size or specify colors in the following, we can use `bsize` and `mypal`. The upshot of specifying these values is that if we want to change the base size or the colors, we need to do so only once.
+
+At a later point you might also look into [global options](991_global_options.qmd).

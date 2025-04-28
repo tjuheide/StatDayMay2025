@@ -54,6 +54,11 @@ We want to annotate our plots by giving each panel an index (letter, number, ...
 
 
 ::: {.callout-tip collapse="true" appearance="simple"}
+## Hint (Plague)
+`Plague` consists of 2 elements each of depth 1, i.e., you don't need to get to the first element of the first element as you did previously. Here you just need to modify the first element of `Plague`.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
 ## Solution (Plague)
 
 ```{r}
@@ -83,7 +88,7 @@ Put together the 2 plots, and add annotation.
 :::
 
 #### Finishing touches: positioning the tags
-The tags are perhaps a bit far from the plots (the annotation for the second panel is perhaps too close to the first panel). We can move the tags by adding a custom theme to the above plot. Note that here we need to use `&` instead of `+` when we add this custom theme to get it to work on both plots.
+The tags are perhaps a bit far from the plots (the annotation for the second panel is perhaps too close to the first panel). We can move the tags by adding a custom theme to the above plot. Note that here we need to use `&` instead of `+` when we add this custom theme to get it to work on both panels
 
 In the custom theme you can specify `plot.tag.position` in a similar way as we have moved a legend by `legend.position.inside`. Do that.
 
@@ -97,4 +102,73 @@ In the custom theme you can specify `plot.tag.position` in a similar way as we h
 ```
 :::
 
-Are the labels a bit close to the numbers in the at risk table? Check out the [cheap trick](https://tjuheide.github.io/StatDayMay2025/992_label_spacing.html) in the notes.
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## The finished plot
+
+```{r, echo = FALSE, eval = TRUE, fig.width = 13, fig.fullwidth = TRUE}
+source("xx_generics.r")
+
+risk_fun <- function(thisanalysis) {
+  temp <- risk |>
+    filter(analysis == thisanalysis)
+  
+  ggplot(temp, aes(x = time,
+                   y = estimate,
+                   color = x,
+                   fill = x,
+                   ymin = lcl,
+                   ymax = ucl)) +
+    geom_stepribbon(show.legend = FALSE,
+                    alpha = .2,
+                    aes(color = NULL)) +
+    geom_step(linewidth = 2) +
+    scale_color_manual(values = mypal) +
+    scale_fill_manual(values = mypal) +
+    scale_y_continuous(labels = percent_format(accuracy = 1)) +
+    theme_classic(base_size = bsize) +
+    theme(
+      legend.position = "inside",
+      legend.position.inside = c(.8, .2),
+      legend.title = element_blank()
+    ) +
+    labs(x = "Time", y = paste("Risk of", thisanalysis)) +
+    coord_cartesian(ylim = c(0,.15))
+}
+
+atrisk_fun <- function(thisanalysis){
+  temp <- atrisk_risk |>
+    filter(analysis == thisanalysis)
+  ggplot(temp, aes(x = time, y = x, label = natrisk)) +
+    geom_text(size = 4) +
+    theme_void(base_size = bsize) +
+    theme(axis.text.y = element_text(hjust = 1),
+          plot.title = element_text(hjust = -.1, size = bsize)) +
+    ggtitle("At risk")
+}
+
+
+Plague_curves <- risk_fun("Plague")
+Plague_table <- atrisk_fun("Plague")
+Plague <- Plague_curves / Plague_table +
+  plot_layout(heights = c(9,1))
+
+Plague[[1]] <- Plague[[1]] +
+  theme(axis.title.y = element_text(vjust = -10))
+Plague <- wrap_elements(Plague)
+
+Cholera_curves <- risk_fun("Cholera")
+Cholera_table <- atrisk_fun("Cholera")
+Cholera <- Cholera_curves / Cholera_table +
+  plot_layout(heights = c(9,1))
+
+Cholera[[1]] <- Cholera[[1]] +
+  theme(axis.title.y = element_text(vjust = -10))
+Cholera <- wrap_elements(Cholera)
+
+(Plague | Cholera) +
+  plot_annotation(tag_level = "A") &
+  theme(plot.tag.position = c(.1, 1))
+```
+:::
+
+Are the labels a bit close to the numbers in the at risk table? Check out the [cheap trick](993_label_spacing.qmd) which was applied when making [this version of the figure](020_front.qmd).

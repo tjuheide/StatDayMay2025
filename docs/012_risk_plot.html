@@ -237,7 +237,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./992_label_spacing.html" class="sidebar-item-text sidebar-link">
+  <a href="./992_separating_lines.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Separating lines</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./993_label_spacing.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Cheap trick for label spacing</span></a>
   </div>
 </li>
@@ -342,6 +348,16 @@ Solution
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(survival, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> estimate, <span class="at">color =</span> x)) <span class="sc">+</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_step</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>There are <a href="./992_separating_lines.html">other methods</a> for creating separate curves for separate groups, which you may want to look into at some other time.</p>
 </div>
 </div>
 </div>
@@ -566,7 +582,7 @@ Solution
 </section>
 <section id="coloring-areas-using-fill" class="level4">
 <h4 class="anchored" data-anchor-id="coloring-areas-using-fill">Coloring areas using <code>fill</code></h4>
-<p>We also want the fill of the ribbons to be colored. We can achieve this by specifying the aesthetic <code>fill</code> - do that. (As for <code>ymin</code> and <code>ymax</code>, <code>fill</code> can be specified locally or globally, it should not make a difference in this exercise as <code>fill</code> is not used elsewhere.)</p>
+<p>We also want the fill of the ribbons to be colored according to the exposure. We can achieve this by specifying the aesthetic <code>fill</code> - do that. (As for <code>ymin</code> and <code>ymax</code>, <code>fill</code> can be specified locally or globally, it should not make a difference in this exercise as <code>fill</code> is not used elsewhere.)</p>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -742,7 +758,7 @@ Solution
 </section>
 <section id="adding-to-tick-labels" class="level4">
 <h4 class="anchored" data-anchor-id="adding-to-tick-labels">Adding % to tick labels</h4>
-<p>As a final step in making the base plot, i.e., the plot we will use to insert one plot into the other, we want to convert the y-axis to a percent-scale. We can do this using the function <code>percent_format()</code> from the <code>scales</code> package within the function <code>scale_y_continuous()</code> from <code>ggplot2</code>. Specifically we need to specify that the parameter <code>labels</code> in <code>scale_y_continuous()</code> should be <code>percent_format(accuracy = 1)</code>. Try playing with accuracy to see what it does (or check the documentation).</p>
+<p>As a final step in making the base plot, i.e., the plot we will use to insert one plot into the other, we want to convert the y-axis to a percent-scale. We can do this using the function <code>percent_format()</code> from the <code>scales</code> package within the function <code>scale_y_continuous()</code> from <code>ggplot2</code>. Specifically, we need to specify that the parameter <code>labels</code> in <code>scale_y_continuous()</code> should be <code>percent_format(accuracy = 1)</code>. Try playing with accuracy to see what it does (or check the documentation).</p>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">

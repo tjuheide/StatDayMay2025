@@ -13,7 +13,7 @@ execute:
 
 ### Avoid repetitions - use functions (again)
 
-As for the risk curves we will make a function that can produce risk tables for a each level of `analysis`.
+We will now make a function that can produce risk tables for a each level of `analysis`, as we did for the risk curves.
 
 Again, it is probably a good idea to make a risk table within one level of `analysis` and then wrap it up inside a function.
 
@@ -35,11 +35,37 @@ atrisk_fun <- function(thisanalysis){
   temp <- atrisk_risk |>
     filter(analysis == thisanalysis)
   ggplot(temp, aes(x = time, y = x, label = natrisk)) +
-    geom_text() +
+    geom_text(size = 4) +
     theme_void(base_size = bsize) +
     theme(axis.text.y = element_text(hjust = 1),
           plot.title = element_text(hjust = -.1, size = bsize)) +
     ggtitle("At risk")
 }
+```
+:::
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## The risk table for `"Cholera"`
+
+```{r}
+atrisk_fun("Cholera")
+```
+
+
+```{r, echo = FALSE, eval = TRUE}
+source("xx_generics.r")
+
+atrisk_fun <- function(thisanalysis){
+  temp <- atrisk_risk |>
+    filter(analysis == thisanalysis)
+  ggplot(temp, aes(x = time, y = x, label = natrisk)) +
+    geom_text(size = 4) +
+    theme_void(base_size = bsize) +
+    theme(axis.text.y = element_text(hjust = 1),
+          plot.title = element_text(hjust = -.1, size = bsize)) +
+    ggtitle("At risk")
+}
+
+atrisk_fun("Cholera")
 ```
 :::

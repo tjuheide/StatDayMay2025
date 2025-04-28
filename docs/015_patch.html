@@ -4875,7 +4875,13 @@ vertical-align: -.125em;
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./992_label_spacing.html" class="sidebar-item-text sidebar-link">
+  <a href="./992_separating_lines.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Separating lines</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./993_label_spacing.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Cheap trick for label spacing</span></a>
   </div>
 </li>
@@ -4932,7 +4938,7 @@ Solution
 </div>
 <section id="specifying-relative-heights-of-plots" class="level4">
 <h4 class="anchored" data-anchor-id="specifying-relative-heights-of-plots">Specifying relative heights of plots</h4>
-<p>This does not look particularly good. We need the curves to make up most of the figure. We can set the relative heights between different rows using the function <code>plot_layout()</code>. Add <code>plot_layout()</code> with the parameter <code>heights</code> specified as a numerical vector with the same length as there are rows in the plot (in this case 2). The numerical values do not have to add up to 1 / 100%. If the values are <code>x</code> and <code>1</code> then the height of the first row will be <code>x</code> times the height of the second. When you are happy with the plot make it an object called pipatrisk.</p>
+<p>This does not look particularly good. We need the curves to make up most of the figure. We can set the relative heights between different rows using the function <code>plot_layout()</code>. Add <code>plot_layout()</code> with the parameter <code>heights</code> specified as a numerical vector with the same length as there are rows in the plot (in this case 2). The numerical values do not have to add up to 1 / 100%. If the values are <code>x</code> and <code>1</code> then the height of the first row will be <code>x</code> times the height of the second. When you are happy with the plot make it an object called <code>pipatrisk</code>.</p>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -4986,6 +4992,7 @@ Hint
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pipatrisk[[<span class="dv">1</span>]][[<span class="dv">1</span>]] <span class="ot">&lt;-</span> pipatrisk[[<span class="dv">1</span>]][[<span class="dv">1</span>]] <span class="sc">+</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Add a custom theme to this.</p>
 </div>
 </div>
 </div>

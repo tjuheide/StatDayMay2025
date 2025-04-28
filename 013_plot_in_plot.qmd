@@ -17,7 +17,7 @@ Here we modify the base plot in 2 ways to get different versions of the same plo
 We start by making the inner plot, we do this in 3 steps:
 
 #### A theme template for the inner plot
-First we specify which built-in theme from `ggplot2` we want to use as our template.
+First, we specify which built-in theme from `ggplot2` we want to use as our template.
 
 Make a new plot by modifying `base`, i.e., add `theme_minimal(base_size = bsize)`. The new plot should not overwrite `base`.
 
@@ -164,23 +164,10 @@ pip <- outer + inset_element(inner,
 #### The resulting plot within plot
 Your current plot should something like this:
 
-::: {.callout-note collapse="true" appearance="default" icon=false}
+::: {.callout-note collapse="true" appearance="default" icon="false"}
 ## Show plot
 ```{r, echo = FALSE, eval = TRUE}
-library(ggplot2)
-library(patchwork)
-library(data.table)
-library(dplyr)
-library(pammtools)
-library(scales)
-
-survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
-  mutate(x = factor(
-    x,
-    levels = c(2,1),
-    labels = c("Control", "Intervention")
-  )) |>
-  filter(analysis == "Survival")
+source("xx_generics.r")
 
 bsize <- 15
 

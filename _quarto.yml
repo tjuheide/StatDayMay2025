@@ -29,7 +29,8 @@ website:
         href: 990_notes.qmd
         contents: 
           - 991_global_options.qmd
-          - 992_label_spacing.qmd
+          - 992_separating_lines.qmd
+          - 993_label_spacing.qmd
       
 format:
   html: 

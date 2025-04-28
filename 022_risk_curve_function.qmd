@@ -26,7 +26,7 @@ Specify `thisanalysis`
 thisanalysis <- "Cholera"
 ```
 
-Then apply `filter()` where you restrict to `analysis` equalling `thisanalysis`
+Then apply `filter()` where you restrict to `analysis` equaling `thisanalysis`
 :::
 
 ::: {.callout-tip collapse="true" appearance="simple"}
@@ -67,9 +67,31 @@ ggplot(temp, aes(x = time, y = estimate, color = x, fill = x, ymin = lcl, ymax =
 ```
 :::
 
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Risk of Cholera
+
+```{r, echo = FALSE, eval = TRUE}
+source("xx_generics.r")
+
+thisanalysis <- "Cholera"
+temp <- risk |>
+  filter(analysis == thisanalysis)
+
+ggplot(temp, aes(x = time, y = estimate, color = x, fill = x, ymin = lcl, ymax = ucl)) +
+  geom_stepribbon(show.legend = FALSE,
+                  alpha = .2,
+                  aes(color = NULL)) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  theme_classic(base_size = bsize)
+```
+:::
+
 #### Controlling the legend
 We want the legend within the plot in this exercise (rather than removed as in the previous). To move the legend into the plot, add a custom theme and set `legend.position` to `"inside"`. Furthermore, specify `legend.position.inside` within the theme. Let `legend.position.inside` be a numeric 2-dimensional vector with values between 0 and 1.
-Finally, remove the legend title by setting `legend.title` to `element_blank()` (you also need to do this inside your custom theme).
+Finally, remove the legend title by setting `legend.title` to `element_blank()` (this is also done inside your custom theme).
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Hint
@@ -178,7 +200,7 @@ risk_fun <- function(thisanalysis) {
 :::
 
 #### Applying the function - unifying scale on y-axes
-Apply the function on the two different analyses (`"Cholera"` and `"Plague"`). Notice that the y-axes have different scales. Use `coord_cartesian()` inside the function to make the y-axis go to 15% (0.15).
+Apply the function on the two different analyses (`risk_fun("Cholera")` and `risk_fun("Plague")`). Notice that the y-axes have different scales. Use `coord_cartesian()` inside the function to make the y-axis go to 15% (0.15).
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Hint
@@ -188,8 +210,6 @@ In `coord_cartesian()` you need to specify `ylim` which should be given a 2-dime
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## solution
-
-To create and name a function you can use the following code
 
 ```{r}
 risk_fun <- function(thisanalysis) {
@@ -223,3 +243,42 @@ risk_fun <- function(thisanalysis) {
 :::
 
 The function should now be ready for use.
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Applying the function on `"Cholera"`
+
+```{r}
+risk_fun("Cholera")
+```
+
+```{r, echo = FALSE, eval = TRUE}
+source("xx_generics.r")
+risk_fun <- function(thisanalysis) {
+  temp <- risk |>
+    filter(analysis == thisanalysis)
+  
+  ggplot(temp, aes(x = time,
+                   y = estimate,
+                   color = x,
+                   fill = x,
+                   ymin = lcl,
+                   ymax = ucl)) +
+    geom_stepribbon(show.legend = FALSE,
+                    alpha = .2,
+                    aes(color = NULL)) +
+    geom_step(linewidth = 2) +
+    scale_color_manual(values = mypal) +
+    scale_fill_manual(values = mypal) +
+    scale_y_continuous(labels = percent_format(accuracy = 1)) +
+    theme_classic(base_size = bsize) +
+    theme(
+      legend.position = "inside",
+      legend.position.inside = c(.8, .2),
+      legend.title = element_blank()
+    ) +
+    labs(x = "Time", y = paste("Risk of", thisanalysis)) +
+    coord_cartesian(ylim = c(0,.15))
+}
+risk_fun("Cholera")
+```
+:::

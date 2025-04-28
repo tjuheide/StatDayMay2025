@@ -12,25 +12,12 @@ execute:
 ---
 
 ```{r, echo =  FALSE}
+source("xx_generics.r")
 
-library(ggplot2)
-library(patchwork)
-library(data.table)
-library(dplyr)
-library(pammtools)
-library(scales)
-
-bsize <- 15
-
-mypal <- c("#aaaaaa", "#af0000")
-
-survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
-  mutate(x = factor(
-    x,
-    levels = c(2,1),
-    labels = c("Control", "Intervention")
-  )) |>
-  filter(analysis == "Survival")
+atrisk_survival <- atrisk_survival |>
+  mutate(x = factor(x,
+                    levels = c("Control", "Intervention"),
+                    labels = c("Control ", "Intervention ")))
 
 base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
   geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
@@ -59,12 +46,8 @@ pip <- outer + inset_element(inner,
                              top = .9,
                              bottom = .05)
 
-atrisk_survival <- survival |>
-  filter(is.na(natrisk) == F) |>
-  select(x, time, natrisk)
-
 risktable <- ggplot(atrisk_survival, aes(x = time, y = x)) +
-  geom_text(aes(label = natrisk), show.legend = FALSE) +
+  geom_text(aes(label = natrisk), size = 4, show.legend = FALSE) +
   theme_void(base_size = bsize) +
   theme(axis.text.y = element_text(hjust = 1, color = mypal),
         plot.title = element_text(hjust = -.1, size = bsize)) +

@@ -23,25 +23,7 @@ Below are versions of the plot-in-plot survival curves where the exposure group 
 #| label: fig-hjust1
 #| fig-cap: |
 #|   Right-aligned labels (`hjust = 1`)
-
-library(ggplot2)
-library(patchwork)
-library(data.table)
-library(dplyr)
-library(pammtools)
-library(scales)
-
-bsize <- 15
-
-mypal <- c("#aaaaaa", "#af0000")
-
-survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
-  mutate(x = factor(
-    x,
-    levels = c(2,1),
-    labels = c("Control", "Intervention")
-  )) |>
-  filter(analysis == "Survival")
+source("xx_generics.r")
 
 base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
   geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
@@ -97,24 +79,7 @@ pipatrisk
 #| label: fig-hjust0
 #| fig-cap: |
 #|   Left-aligned labels (`hjust = 0`)
-library(ggplot2)
-library(patchwork)
-library(data.table)
-library(dplyr)
-library(pammtools)
-library(scales)
-
-bsize <- 15
-
-mypal <- c("#aaaaaa", "#af0000")
-
-survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
-  mutate(x = factor(
-    x,
-    levels = c(2,1),
-    labels = c("Control", "Intervention")
-  )) |>
-  filter(analysis == "Survival")
+source("xx_generics.r")
 
 base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
   geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
@@ -170,25 +135,7 @@ pipatrisk
 #| label: fig-hjust05
 #| fig-cap: |
 #|   Center-aligned labels (`hjust = .5`)
-
-library(ggplot2)
-library(patchwork)
-library(data.table)
-library(dplyr)
-library(pammtools)
-library(scales)
-
-bsize <- 15
-
-mypal <- c("#aaaaaa", "#af0000")
-
-survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
-  mutate(x = factor(
-    x,
-    levels = c(2,1),
-    labels = c("Control", "Intervention")
-  )) |>
-  filter(analysis == "Survival")
+source("xx_generics.r")
 
 base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
   geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
@@ -261,24 +208,13 @@ then there is daylight between the labels and the numbers at risk as seen in @fi
 #| fig-cap: |
 #|   Right-aligned labels (`hjust = 1`) with additional space in label
 
-library(ggplot2)
-library(patchwork)
-library(data.table)
-library(dplyr)
-library(pammtools)
-library(scales)
+source("xx_generics.r")
 
-bsize <- 15
+survival <- survival |>
+  mutate(x = factor(x,
+                    levels = c("Control", "Intervention"),
+                    labels = c("Control ", "Intervention ")))
 
-mypal <- c("#aaaaaa", "#af0000")
-
-survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
-  mutate(x = factor(
-    x,
-    levels = c(2,1),
-    labels = c("Control ", "Intervention ")
-  )) |>
-  filter(analysis == "Survival")
 
 base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
   geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
@@ -361,7 +297,7 @@ grid$new_group <- paste(" ",grid$group)
 anno <- subset(grid, Time == 2025)
 
 # The plot where no space is included between lines and text.
-# Substitute group for new_group to get spacing.
+# Substitute new_group for group to get spacing.
 ggplot(grid, aes(x = Time, y = y, color = group)) +
   theme_classic() +
   theme(legend.position = "none",

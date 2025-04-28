@@ -17,4 +17,4 @@ This site is a brief walk-through of how various types of risk curves can be mad
 
 `SAS` will be mentioned a few times but no knowledge of `SAS` is needed. However, it is assumed that the reader has some prior knowledge of `ggplot2`.
 
-The data can be found [here](https://github.com/tjuheide/StatDayMay2025/blob/main/data/riskdata.csv), scripts are [here](https://github.com/tjuheide/StatDayMay2025).
+The data can be found [here](https://github.com/tjuheide/StatDayMay2025/blob/main/data/riskdata.csv), scripts used to create this website are [here](https://github.com/tjuheide/StatDayMay2025).

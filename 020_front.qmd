@@ -12,30 +12,12 @@ execute:
 ---
 
 ```{r echo = FALSE, fig.width = 13, fig.fullwidth = TRUE}
-library(ggplot2)
-library(patchwork)
-library(data.table)
-library(dplyr)
-library(pammtools)
-library(scales)
+source("xx_generics.r")
 
-# subsetting to the risk analysis
-risk <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curves/data/riskdata.csv") |>
-  mutate(x = factor(
-    x,
-    levels = c(2,1),
-    labels = c("Control  ", "Intervention  ")
-  )) |>
-  filter(analysis != "Survival")
-
-# data for risk table
-atrisk_risk <- risk |>
-  filter(is.na(natrisk) == F) |>
-  select(x, time, natrisk, analysis)
-
-bsize <- 15
-
-mypal <- c("#aaaaaa", "#af0000")
+atrisk_risk <- atrisk_risk |>
+  mutate(x = factor(x,
+                    levels = c("Control", "Intervention"),
+                    labels = c("Control ", "Intervention ")))
 
 risk_fun <- function(thisanalysis) {
   temp <- risk |>
@@ -61,17 +43,18 @@ risk_fun <- function(thisanalysis) {
       legend.title = element_blank()
     ) +
     labs(x = "Time", y = paste("Risk of", thisanalysis)) +
-    coord_cartesian(ylim = c(0,.15))
+    coord_cartesian(ylim = c(0,.15), clip = "off")
 }
 
 atrisk_fun <- function(thisanalysis){
   temp <- atrisk_risk |>
     filter(analysis == thisanalysis)
   ggplot(temp, aes(x = time, y = x, label = natrisk)) +
-    geom_text() +
+    geom_text(size = 4) +
     theme_void(base_size = bsize) +
     theme(axis.text.y = element_text(hjust = 1),
           plot.title = element_text(hjust = -.1, size = bsize)) +
+    coord_cartesian(clip = "off") +
     ggtitle("At risk")
 }
 
