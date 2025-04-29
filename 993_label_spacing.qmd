@@ -16,9 +16,6 @@ Sometimes you might find that a label gets too close to something else.
 
 Below are versions of the plot-in-plot survival curves where the exposure group labels are placed differently in the risk table using different values of `hjust`.
 
-
-::: {.callout-note appearance="simple" icon="false"}
-
 ```{r, echo =  FALSE}
 #| label: fig-hjust1
 #| fig-cap: |
@@ -71,9 +68,6 @@ pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
 
 pipatrisk
 ```
-:::
-
-::: {.callout-note appearance="simple" icon="false"}
 
 ```{r, echo =  FALSE}
 #| label: fig-hjust0
@@ -127,9 +121,6 @@ pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
 
 pipatrisk
 ```
-:::
-
-::: {.callout-note appearance="simple" icon="false"}
 
 ```{r, echo =  FALSE}
 #| label: fig-hjust05
@@ -183,7 +174,6 @@ pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
 
 pipatrisk
 ```
-:::
 
 @fig-hjust1 with right aligned labels corresponds to the one you have made already. Here the labels might be a tad too close to the numbers in the risk table. One solution could be to left align the labels as in @fig-hjust0. However, the difference in distance between labels and numbers might be less aesthetically pleasing, and "Intervention" is still close to the text. @fig-hjust05 is just plain ugly. One cheap trick that is often worth remembering is to edit the labels of the data. I.e., if the labels had been specified as here
 
@@ -200,13 +190,10 @@ survival <- fread("//uni.au.dk/dfs/HE_KEA-DCESAS02/S/Stat day May 2025/risk_curv
 
 then there is daylight between the labels and the numbers at risk as seen in @fig-hjust1space
 
-::: {.callout-note appearance="simple" icon="false"}
-## Cheap trick
-
 ```{r, echo =  FALSE}
 #| label: fig-hjust1space
 #| fig-cap: |
-#|   Right-aligned labels (`hjust = 1`) with additional space in label
+#|   Cheap trick: Right-aligned labels (`hjust = 1`) with additional space in label
 
 source("xx_generics.r")
 
@@ -262,9 +249,9 @@ pipatrisk[[1]][[1]] <- pipatrisk[[1]][[1]] +
 
 pipatrisk
 ```
-:::
 
-A similar trick can be useful if you need to add space to the left. Suppose you have some time-trend data where there are too many groups to make a good palette, and you decide to remove the legend and instead insert the labels as text to the right of the figures where the individual lines end:
+A similar trick can be useful if you need to add space to the left. Suppose you have some time-trend data where there are too many groups to make a good palette, and you decide to remove the legend and instead insert the labels as text to the right of the figures where the individual lines end, as in @fig-timetrend1. Again the labels might be too close to the data, and so we might want to add some space to get @fig-timetrend2.
+
 ```{r, eval = FALSE}
 library(ggplot2)
 
@@ -316,16 +303,14 @@ ggplot(grid, aes(x = Time, y = y, color = group)) +
 
 ```
 
-::: {.callout-note appearance="simple" icon="false"}
-## Labels too close to lines using the variable `group`
 ```{r, echo = FALSE}
-library(ggplot2)
 #| label: fig-timetrend1
 #| fig-cap: |
-#|   Too many groups to tell colors apart
+#|   Labels too close to lines using the variable `group`
 
+library(ggplot2)
 
-# some non-sensical data
+# some nonsensical data
 set.seed(13)
 grid <- expand.grid(
   Time = 2020:2025,
@@ -364,18 +349,14 @@ ggplot(grid, aes(x = Time, y = y, color = group)) +
             hjust = 0)
 
 ```
-:::
 
-::: {.callout-note appearance="simple" icon="false"}
-## Labels positioned better using the variable `new_group`
 ```{r, echo = FALSE}
-library(ggplot2)
 #| label: fig-timetrend2
 #| fig-cap: |
-#|   Too many groups to tell colors apart - with leading space
+#|   Labels positioned better using the variable `new_group`
 
-
-# some non-sensical data
+library(ggplot2)
+# some nonsensical data
 set.seed(13)
 grid <- expand.grid(
   Time = 2020:2025,
@@ -414,4 +395,3 @@ ggplot(grid, aes(x = Time, y = y, color = new_group)) +
             hjust = 0)
 
 ```
-:::

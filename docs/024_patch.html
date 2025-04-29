@@ -4960,11 +4960,27 @@ Why 2 functions
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution (Plague)
+Hint (Plague)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>Plague</code> consists of 2 elements each of depth 1, i.e., you don’t need to get to the first element of the first element as you did previously. Here you just need to modify the first element of <code>Plague</code>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution (Plague)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Plague <span class="ot">&lt;-</span> Plague_curves <span class="sc">/</span> Plague_table <span class="sc">+</span> </span>
@@ -4981,22 +4997,6 @@ Solution (Plague)
 <section id="getting-each-patchworks-to-act-as-one-plot---not-two-plots-stitched-together" class="level4">
 <h4 class="anchored" data-anchor-id="getting-each-patchworks-to-act-as-one-plot---not-two-plots-stitched-together">Getting each patchworks to act as one plot - not two plots stitched together</h4>
 <p>We want to annotate our plots by giving each panel an index (letter, number, …) we can refer to. If we blindly put together the 2 patchworks of 2 plots the result will be considered a combination of 4 plots and each will get its own symbol (both plots with curves and risk tables). To prevent that we can use the function <code>wrap_elements()</code> on each of our 2 patchworks.</p>
-<div class="callout callout-style-simple callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint (Plague)
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p><code>Plague</code> consists of 2 elements each of depth 1, i.e., you don’t need to get to the first element of the first element as you did previously. Here you just need to modify the first element of <code>Plague</code>.</p>
-</div>
-</div>
-</div>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">

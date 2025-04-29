@@ -36,6 +36,11 @@ Assuming you have created objects `Plague_curves`, `Plague_table`, `Cholera_curv
 Put the risk curves on top of the at risk table, as you have done before, for Plague and Cholera separately. Remember to specify the relative heights. Move the y-axis title closer to the plot.
 
 ::: {.callout-tip collapse="true" appearance="simple"}
+## Hint (Plague)
+`Plague` consists of 2 elements each of depth 1, i.e., you don't need to get to the first element of the first element as you did previously. Here you just need to modify the first element of `Plague`.
+:::
+
+::: {.callout-tip collapse="true" appearance="simple"}
 ## Solution (Plague)
 
 ```{r}
@@ -51,12 +56,6 @@ Do the same for Cholera - this could have been part of a function.
 #### Getting each patchworks to act as one plot - not two plots stitched together
 
 We want to annotate our plots by giving each panel an index (letter, number, ...) we can refer to. If we blindly put together the 2 patchworks of 2 plots the result will be considered a combination of 4 plots and each will get its own symbol (both plots with curves and risk tables). To prevent that we can use the function `wrap_elements()` on each of our 2 patchworks.
-
-
-::: {.callout-tip collapse="true" appearance="simple"}
-## Hint (Plague)
-`Plague` consists of 2 elements each of depth 1, i.e., you don't need to get to the first element of the first element as you did previously. Here you just need to modify the first element of `Plague`.
-:::
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Solution (Plague)
