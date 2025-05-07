@@ -7,6 +7,9 @@ website:
   sidebar: 
     style: "docked"
     search: true
+    left:
+      - text: "Home"
+        href: 000_about.qmd
     contents: 
       - section:
         href: 000_about.qmd
