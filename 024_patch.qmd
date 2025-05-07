@@ -37,7 +37,9 @@ Put the risk curves on top of the at risk table, as you have done before, for Pl
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Hint (Plague)
-`Plague` consists of 2 elements each of depth 1, i.e., you don't need to get to the first element of the first element as you did previously. Here you just need to modify the first element of `Plague`.
+-   Make an object `Plague` by putting `Plague_curves` on top of `Plague_table`.
+-   Specify relative heights.
+-   `Plague` consists of 2 elements each of depth 1, i.e., when moving the y-axis title, you don't need to get to the "first element of the first element" as you did for the [plot-in-plot](015_patch.qmd#move-the-y-axis-title-closer-to-the-plot). Here you just need to modify the first element of `Plague`: `Plague[[1]]`.
 :::
 
 ::: {.callout-tip collapse="true" appearance="simple"}
@@ -53,9 +55,9 @@ Plague[[1]] <- Plague[[1]] +
 Do the same for Cholera - this could have been part of a function.
 :::
 
-#### Getting each patchworks to act as one plot - not two plots stitched together
+#### Getting each patchwork to act as one plot - not two plots stitched together
 
-We want to annotate our plots by giving each panel an index (letter, number, ...) we can refer to. If we blindly put together the 2 patchworks of 2 plots the result will be considered a combination of 4 plots and each will get its own symbol (both plots with curves and risk tables). To prevent that we can use the function `wrap_elements()` on each of our 2 patchworks.
+We want to annotate our plots by giving each panel an index (letter, number, ...) we can refer to. If we blindly put together the 2 patchworks of 2 plots the result will be considered a combination of 4 plots and curves and risk tables will each get their own symbol. To prevent that, use the function `wrap_elements()` separately on each of the 2 patchworks.
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Solution (Plague)
@@ -67,11 +69,7 @@ Do the same for Cholera - this could also have been part of a function.
 :::
 
 #### Patching the two outcome figures and adding annotation
-We are now ready to patch the resulting plots, that now each behave as if they were just one plot.
-
-This can be done by the code `Plague + Cholera` or `Plague | Cholera`, there should not be a difference in this exercise.
-
-However, when we add annotation it is important to have the code combining the plots in parentheses, e.g., `(Plague + Cholera)`, so be sure to do that.
+We are now ready to patch the resulting plots, that now each behave as if they were just one plot. This can be done by the code `Plague + Cholera` or `Plague | Cholera`, there should not be a difference in this exercise. However, when we add annotation it is important to have the code combining the plots in parentheses, e.g., `(Plague + Cholera)`, so be sure to do that.
 
 We can add annotation using the function `plot_annotation()` which has a parameter called `tag_level` that takes values `"A"`, `"a"`, `"1"`, `"I"` and` "i"` to determine which index you want to use. (You can also specify `prefix` and `suffix` if you want an index like `Fig 1:`.)
 
@@ -89,7 +87,7 @@ Put together the 2 plots, and add annotation.
 #### Finishing touches: positioning the tags
 The tags are perhaps a bit far from the plots (the annotation for the second panel is perhaps too close to the first panel). We can move the tags by adding a custom theme to the above plot. Note that here we need to use `&` instead of `+` when we add this custom theme to get it to work on both panels
 
-In the custom theme you can specify `plot.tag.position` in a similar way as we have moved a legend by `legend.position.inside`. Do that.
+In the custom theme you can specify `plot.tag.position` in a similar way as we have moved a legend by `legend.position.inside`, i.e., it needs a 2-dimensional vector. Do that.
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 ## Solution
@@ -170,4 +168,4 @@ Cholera <- wrap_elements(Cholera)
 ```
 :::
 
-Are the labels a bit close to the numbers in the at risk table? Check out the [cheap trick](993_label_spacing.qmd) which was applied when making [this version of the figure](020_front.qmd).
+Are the labels too close to the numbers in the at risk table? Check out the [cheap trick](993_label_spacing.qmd) which was applied when making [this version of the figure](020_front.qmd).
