@@ -19,6 +19,49 @@ The final step is done using `patchwork` once again. To put one plot-object (of 
 ```{r}
 pip / risktable
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo = FALSE, eval = TRUE}
+source("xx_generics.r")
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+inner <- base + 
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none",
+        axis.title = element_blank())
+
+outer <- base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", color = "", y = "Survival") +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "none")
+
+pip <- outer + inset_element(inner,
+                             left = .1,
+                             right = .97,
+                             top = .9,
+                             bottom = .05)
+
+risktable <- ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text(size = 4) +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal),
+        plot.title = element_text(hjust = -.1, size = bsize)) +
+  ggtitle("At risk")
+
+
+pip / risktable
+```
+:::
 :::
 
 #### Specifying relative heights of plots
@@ -30,6 +73,48 @@ This does not look particularly good. We need the curves to make up most of the 
 ```{r}
 pipatrisk <- pip / risktable + plot_layout(heights = c(9,1))
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo = FALSE, eval = TRUE}
+source("xx_generics.r")
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+inner <- base + 
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none",
+        axis.title = element_blank())
+
+outer <- base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", color = "", y = "Survival") +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "none")
+
+pip <- outer + inset_element(inner,
+                             left = .1,
+                             right = .97,
+                             top = .9,
+                             bottom = .05)
+
+risktable <- ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text(size = 4) +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal),
+        plot.title = element_text(hjust = -.1, size = bsize)) +
+  ggtitle("At risk")
+
+pip / risktable + plot_layout(heights = c(9,1))
+```
+:::
 :::
 
 #### Move the y-axis title closer to the plot

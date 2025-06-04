@@ -25,7 +25,7 @@ Plague_curves <- risk_fun("Plague")
 :::
 
 ::: {.callout-note appearance="simple"}
-## Why 2 functions
+## Why 2 functions?
 
 We could have included the functionality of `atrisk_fun()` into `risk_fun()`, and you might want to do that in real projects (or as you go along here). However, there are a few quirks of patchwork that it might be relevant to look into outside of a function.
 :::

@@ -35,4 +35,4 @@ atrisk_risk <- risk |>
 
 bsize <- 15
 
-mypal <- c("#aaaaaa", "#af0000")
+mypal <- c("#E69F00", "#56B4E9")

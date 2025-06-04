@@ -61,7 +61,19 @@ ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
   geom_text() +
   theme_void(base_size = bsize)
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo = FALSE, eval = TRUE}
+source("xx_generics.r")
+ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text() +
+  theme_void(base_size = bsize)
+```
 :::
+:::
+
 ::: {.callout-note appearance="default"}
 ## `base_size` and text size
 At this point `base_size` actually does not affect anything. The size of the text can be modified by the parameter `size` inside `geom_text()`. You might want to set `size` to 4. `base_size` is not used until we reinsert the labels on the y-axis.
@@ -83,6 +95,18 @@ ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
   theme_void(base_size = bsize) +
   theme(axis.text.y = element_text(hjust = 1, color = mypal))
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo = FALSE, eval = TRUE}
+source("xx_generics.r")
+ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text(size = 4) +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal))
+```
+:::
 :::
 
 ::: {.callout-note appearance="default"}
@@ -108,6 +132,19 @@ ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
   theme(axis.text.y = element_text(hjust = 1, color = mypal)) +
   ggtitle("At risk")
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo = FALSE, eval = TRUE}
+source("xx_generics.r")
+ggplot(atrisk_survival, aes(x = time, y = x, label = natrisk)) +
+  geom_text(size = 4) +
+  theme_void(base_size = bsize) +
+  theme(axis.text.y = element_text(hjust = 1, color = mypal)) +
+  ggtitle("At risk")
+```
+:::
 :::
 
 #### Editing the appearance of the title

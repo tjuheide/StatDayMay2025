@@ -28,6 +28,25 @@ Make a new plot by modifying `base`, i.e., add `theme_minimal(base_size = bsize)
 base + 
   theme_minimal(base_size = bsize)
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+base + 
+  theme_minimal(base_size = bsize)
+```
+:::
 :::
 
 #### Removing the legend
@@ -48,6 +67,26 @@ base +
   theme_minimal(base_size = bsize) +
   theme(legend.position = "none")
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+base + 
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none")
+```
+:::
 :::
 
 #### Remove axis titles
@@ -69,6 +108,27 @@ inner <- base +
   theme(legend.position = "none",
         axis.title = element_blank())
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+base + 
+  theme_minimal(base_size = bsize) +
+  theme(legend.position = "none",
+        axis.title = element_blank())
+```
+:::
 :::
 
 ::: {.callout-important appearance="default"}
@@ -106,6 +166,25 @@ To create a vector use the function `c()`. Write the values to be used in the ve
 base +
   coord_cartesian(ylim = c(0, 1))
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+base +
+  coord_cartesian(ylim = c(0, 1))
+```
+:::
 :::
 
 #### Specifying axis titles
@@ -125,6 +204,26 @@ base +
   coord_cartesian(ylim = c(0, 1)) +
   labs(x = "Time", y = "Survival")
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", y = "Survival")
+```
+:::
 :::
 
 #### Adding a theme template
@@ -140,6 +239,28 @@ outer <- base +
   theme_classic(base_size = bsize) +
   theme(legend.position = "none")
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1))
+
+base +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Time", color = "", y = "Survival") +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "none")
+```
+:::
 :::
 
 #### Inserting one plot into the other
@@ -166,13 +287,9 @@ Your current plot should something like this:
 
 ::: {.callout-note collapse="true" appearance="default" icon="false"}
 ## Show plot
-```{r, echo = FALSE, eval = TRUE}
+
+```{r, echo=FALSE, eval=TRUE}
 source("xx_generics.r")
-
-bsize <- 15
-
-mypal <- c("#aaaaaa", "#af0000")
-
 base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
   geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
                   show.legend = FALSE,
@@ -182,7 +299,7 @@ base <- ggplot(survival, aes(x = time, y = estimate, color = x)) +
   scale_fill_manual(values = mypal) +
   scale_y_continuous(labels = percent_format(accuracy = 1))
 
-inner <- base +
+inner <- base + 
   theme_minimal(base_size = bsize) +
   theme(legend.position = "none",
         axis.title = element_blank())
@@ -192,7 +309,6 @@ outer <- base +
   labs(x = "Time", color = "", y = "Survival") +
   theme_classic(base_size = bsize) +
   theme(legend.position = "none")
-
 
 pip <- outer + inset_element(inner,
                              left = .1,

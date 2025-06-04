@@ -116,6 +116,31 @@ ggplot(temp, aes(x = time, y = estimate, color = x, fill = x, ymin = lcl, ymax =
         legend.position.inside = c(.8, .2),
         legend.title = element_blank())
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo = FALSE, eval = TRUE}
+source("xx_generics.r")
+
+thisanalysis <- "Cholera"
+temp <- risk |>
+  filter(analysis == thisanalysis)
+
+ggplot(temp, aes(x = time, y = estimate, color = x, fill = x, ymin = lcl, ymax = ucl)) +
+  geom_stepribbon(show.legend = FALSE,
+                  alpha = .2,
+                  aes(color = NULL)) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  theme_classic(base_size = bsize) +
+  theme(legend.position = "inside",
+        legend.position.inside = c(.8, .2),
+        legend.title = element_blank())
+```
+:::
 :::
 
 #### Axis titles
@@ -209,7 +234,7 @@ In `coord_cartesian()` you need to specify `ylim` which should be given a 2-dime
 :::
 
 ::: {.callout-tip collapse="true" appearance="simple"}
-## solution
+## Solution
 
 ```{r}
 risk_fun <- function(thisanalysis) {

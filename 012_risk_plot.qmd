@@ -52,6 +52,16 @@ The variable you need to use is the one indicating the exposure group.
 ggplot(survival, aes(x = time, y = estimate, color = x)) +
   geom_step()
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_step()
+```
+:::
 :::
 
 ::: {.callout-note appearance="simple"}
@@ -74,6 +84,16 @@ A second thing we want to do is to make the lines thicker. Do this by setting th
 ggplot(survival, aes(x = time, y = estimate, color = x)) +
   geom_step(linewidth = 2)
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_step(linewidth = 2)
+```
+:::
 :::
 
 ::: {.callout-note appearance="simple"}
@@ -121,6 +141,17 @@ ggplot(survival,
 ```
 
 In our example it makes no difference, as no other `geom_`s in this plot require `ymin` and `ymax` aesthetics.
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_step(linewidth = 2) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl))
+```
+:::
 :::
 
 #### Layered graphics
@@ -141,6 +172,17 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
   geom_step(linewidth = 2)
 
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl)) +
+  geom_step(linewidth = 2)
+```
+:::
 :::
 
 #### Remove part of the legend
@@ -169,6 +211,18 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
                   show.legend = FALSE) +
   geom_step(linewidth = 2)
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl),
+                  show.legend = FALSE) +
+  geom_step(linewidth = 2)
+```
+:::
 :::
 
 #### Coloring areas using `fill`
@@ -189,6 +243,18 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
                   show.legend = FALSE) +
   geom_step(linewidth = 2)
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x),
+                  show.legend = FALSE) +
+  geom_step(linewidth = 2)
+```
+:::
 :::
 
 #### Transparency of areas using `alpha`
@@ -210,6 +276,18 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
                   alpha = .2) +
   geom_step(linewidth = 2)
 ```
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2)
+```
+:::
 :::
 
 #### Editing oulines of areas
@@ -225,6 +303,19 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
                   alpha = .2) +
   geom_step(linewidth = 2)
 ```
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2)
+
+```
+:::
 :::
 
 ::: {.callout-tip collapse="true" appearance="simple"}
@@ -238,6 +329,20 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
                   color = "white") +
   geom_step(linewidth = 2)
 ```
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x),
+                  show.legend = FALSE,
+                  color = "white",
+                  alpha = .2) +
+  geom_step(linewidth = 2)
+
+```
+:::
 :::
 
 #### Specifying colors
@@ -261,6 +366,22 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
   scale_color_manual(values = mypal) +
   scale_fill_manual(values = mypal)
 ```
+
+::: {.callout-note collapse="true" appearance="default" icon="false"}
+## Show plot
+
+```{r, echo=FALSE, eval=TRUE}
+source("xx_generics.r")
+ggplot(survival, aes(x = time, y = estimate, color = x)) +
+  geom_stepribbon(aes(ymin = lcl, ymax = ucl, fill = x, color = NULL),
+                  show.legend = FALSE,
+                  alpha = .2) +
+  geom_step(linewidth = 2) +
+  scale_color_manual(values = mypal) +
+  scale_fill_manual(values = mypal)
+
+```
+:::
 :::
 
 #### Adding % to tick labels 
@@ -286,6 +407,7 @@ ggplot(survival, aes(x = time, y = estimate, color = x)) +
   scale_y_continuous(labels = percent_format(accuracy = 1))
 
 ```
+(This plot can be seen at the bottom of the document.)
 :::
 
 #### Creating the object `base`
